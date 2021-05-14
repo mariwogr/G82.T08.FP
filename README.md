@@ -1,9 +1,9 @@
 # Guided Exercise 4
 
-TXX.GYY.GE4
+G82.T08.FP
 
 Authors:
 
-<author 1>, <email author 1>, user name in github
+Mario García Rodríguez, 100428982@alumnos.uc3m.es, mariwogr
 
-<author 2>, <email author 2>, user name in github
+Sergio Gil Nova, 100429089@alumnos.uc3m.es, jim-hawkins

@@ -21,31 +21,33 @@ class AccessRequest:
         self.__email_address = Email(email_address).value
         self.__validity = access_type_object.validate_days(validity)
         access_type_object = None
-        #justnow = datetime.utcnow()
-        #self.__time_stamp = datetime.timestamp(justnow)
-        #only for testing , fix de time stamp to this value 1614962381.90867 , 5/3/2020 18_40
+        # justnow = datetime.utcnow()
+        # self.__time_stamp = datetime.timestamp(justnow)
+        # only for testing , fix de time stamp to this value 1614962381.90867 , 5/3/2020 18_40
         self.__time_stamp = 1614962381.90867
+        self.__access_code = self.access_code
 
     def __str__(self):
         """It returns the json corresponding to the AccessRequest"""
         return "AccessRequest:" + json.dumps(self.__dict__)
 
-    def store_request( self ):
+    def store_request(self):
         """It Saves the request in the store"""
         request_store = RequestJsonStore()
         request_store.add_item(self)
         del request_store
 
     @property
-    def validity( self ):
+    def validity(self):
         """Property representing the validity days"""
         return self.__validity
 
     @property
-    def name( self ):
+    def name(self):
         """Property representing the name and the surname of
         the person who request access to the building"""
         return self.__name
+
     @name.setter
     def name(self, value):
         """name setter"""
@@ -55,6 +57,7 @@ class AccessRequest:
     def visitor_type(self):
         """Property representing the type of visitor: Resident or Guest"""
         return self.__visitor_type
+
     @visitor_type.setter
     def visitor_type(self, value):
         self.__visitor_type = value
@@ -63,14 +66,16 @@ class AccessRequest:
     def email_address(self):
         """Property representing the requester's email address"""
         return self.__email_address
+
     @email_address.setter
     def email_address(self, value):
         self.__email_address = value
 
     @property
-    def id_document( self ):
+    def id_document(self):
         """Property representing the requester's DNI"""
         return self.__id_document
+
     @id_document.setter
     def id_document( self, value ):
         self.__id_document = value
@@ -83,22 +88,38 @@ class AccessRequest:
     @property
     def access_code (self):
         """Property for obtaining the access code according the requirements"""
+        dict_temp = self.__dict__
+        if "_AccessRequest__access_code" in dict_temp.keys():
+            print(dict_temp.keys())
+            del dict_temp["_AccessRequest__access_code"]
+            res = "AccessRequest:" + json.dumps(dict_temp)
+            return hashlib.md5(res.encode()).hexdigest()
         return hashlib.md5(self.__str__().encode()).hexdigest()
+        # return hashlib.md5(self.__str__().encode()).hexdigest()
+    """if self.__str__().find("_AccessRequest__access_code"):
+            var = hashlib.md5((self.__str__()[:-68] + "}").encode()).hexdigest()
+            print("Recortado: ", var)
+            return hashlib.md5((self.__str__()[:-68] + "}").encode()).hexdigest()
+        else:
+            var = hashlib.md5(self.__str__().encode()).hexdigest()
+            print("Entero: ", var)
+            return hashlib.md5(self.__str__().encode()).hexdigest()"""
+
 
     @classmethod
-    def create_request_from_code( cls, access_code, dni ):
+    def create_request_from_code(cls, access_code, valor):
         """Load from the store an AccessRequest from the access_code
         and the dni"""
         request_store = RequestJsonStore()
-        request_stored = request_store.find_item(dni)
+        request_stored = request_store.find_item(valor)
         if request_stored is None:
             raise AccessManagementException(request_store.NOT_FOUND_IN_THE_STORE)
 
-        request_stored_object = cls(request_stored[ request_store.ID_FIELD ],
-                                        request_stored[ request_store.REQUEST__NAME ],
-                                        request_stored[ request_store.REQUEST__VISITOR_TYPE ],
-                                        request_stored[ request_store.REQUEST__EMAIL_ADDRESS ],
-                                        request_stored[ request_store.ACCESS_REQUEST__VALIDITY ])
+        request_stored_object = cls(request_stored[request_store.ID_FIELD],
+                                    request_stored[request_store.REQUEST__NAME],
+                                    request_stored[request_store.REQUEST__VISITOR_TYPE],
+                                    request_stored[request_store.REQUEST__EMAIL_ADDRESS],
+                                    request_stored[request_store.ACCESS_REQUEST__VALIDITY])
 
         if not request_stored_object.access_code == access_code:
             raise AccessManagementException(request_store.NOT_CORRECT_FOR_THIS_DNI)

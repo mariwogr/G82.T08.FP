@@ -2,6 +2,7 @@
 import json
 from secure_all.exception.access_management_exception import AccessManagementException
 
+
 class JsonStore():
     """Managest stores based on JsonFiles"""
     _FILE_PATH = ""
@@ -27,7 +28,7 @@ class JsonStore():
         except json.JSONDecodeError as ex:
             raise AccessManagementException("JSON Decode Error - Wrong JSON Format") from ex
 
-    def add_item( self, item ):
+    def add_item(self, item):
         """Adds a new element to the list and saves the file
         Since this is a generic class further verifications should be included
         in the specific stores"""
@@ -35,11 +36,13 @@ class JsonStore():
         self._data_list.append(item.__dict__)
         self.save_store()
 
-    def find_item( self, key ):
+    def find_item(self, key):
         """find the value key in the _KEY_FIELD"""
         self.load_store()
         for item in self._data_list:
-            if item[self._ID_FIELD ] == key:
+            print("item key: ", item[self._ID_FIELD])
+            print("passed key: ", key)
+            if item[self._ID_FIELD] == key:
                 return item
         return None
 

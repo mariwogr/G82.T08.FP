@@ -13,8 +13,6 @@ from secure_all.storage.keys_json_store import KeysJsonStore
 from secure_all.parser.key_json_parser import KeyJsonParser
 
 
-
-
 class AccessKey():
     """Class representing the key for accessing the building"""
     #pylint: disable=too-many-instance-attributes
