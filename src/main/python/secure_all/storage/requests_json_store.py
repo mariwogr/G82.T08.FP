@@ -16,6 +16,7 @@ class RequestJsonStore():
         # NOT_FOUND_IN_THE_STORE = "DNI is not found in the store"
         NOT_FOUND_IN_THE_STORE = "Request is not found in the store"
         ACCESS_REQUEST__VALIDITY = '_AccessRequest__validity'
+        REQUEST__ID_DOCUMENT = '_AccessRequest__id_document'
         REQUEST__EMAIL_ADDRESS = '_AccessRequest__email_address'
         REQUEST__VISITOR_TYPE = '_AccessRequest__visitor_type'
         REQUEST__NAME = '_AccessRequest__name'

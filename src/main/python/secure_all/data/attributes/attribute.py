@@ -16,8 +16,10 @@ class Attribute():
     _error_message = ""
 
     def _validate( self, attr_value ):
-        if not isinstance(attr_value,str):
+        if not isinstance(attr_value, str):
             raise AccessManagementException(self._error_message)
+        print(self._validation_pattern, attr_value)
+        print(re.fullmatch(self._validation_pattern, attr_value))
         if not re.fullmatch(self._validation_pattern, attr_value):
             raise AccessManagementException(self._error_message)
         return attr_value

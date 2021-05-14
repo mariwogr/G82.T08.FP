@@ -25,7 +25,7 @@ class AccessRequest:
         # self.__time_stamp = datetime.timestamp(justnow)
         # only for testing , fix de time stamp to this value 1614962381.90867 , 5/3/2020 18_40
         self.__time_stamp = 1614962381.90867
-        self.__access_code = self.access_code
+        self.__access_code = self.access_code_inicial()
 
     def __str__(self):
         """It returns the json corresponding to the AccessRequest"""
@@ -86,25 +86,12 @@ class AccessRequest:
         return self.__time_stamp
 
     @property
-    def access_code (self):
+    def access_code(self):
         """Property for obtaining the access code according the requirements"""
-        dict_temp = self.__dict__
-        if "_AccessRequest__access_code" in dict_temp.keys():
-            print(dict_temp.keys())
-            del dict_temp["_AccessRequest__access_code"]
-            res = "AccessRequest:" + json.dumps(dict_temp)
-            return hashlib.md5(res.encode()).hexdigest()
-        return hashlib.md5(self.__str__().encode()).hexdigest()
-        # return hashlib.md5(self.__str__().encode()).hexdigest()
-    """if self.__str__().find("_AccessRequest__access_code"):
-            var = hashlib.md5((self.__str__()[:-68] + "}").encode()).hexdigest()
-            print("Recortado: ", var)
-            return hashlib.md5((self.__str__()[:-68] + "}").encode()).hexdigest()
-        else:
-            var = hashlib.md5(self.__str__().encode()).hexdigest()
-            print("Entero: ", var)
-            return hashlib.md5(self.__str__().encode()).hexdigest()"""
+        return self.__access_code
 
+    def access_code_inicial(self):
+        return hashlib.md5(self.__str__().encode()).hexdigest()
 
     @classmethod
     def create_request_from_code(cls, access_code, valor):
@@ -115,7 +102,7 @@ class AccessRequest:
         if request_stored is None:
             raise AccessManagementException(request_store.NOT_FOUND_IN_THE_STORE)
 
-        request_stored_object = cls(request_stored[request_store.ID_FIELD],
+        request_stored_object = cls(request_stored[request_store.REQUEST__ID_DOCUMENT],
                                     request_stored[request_store.REQUEST__NAME],
                                     request_stored[request_store.REQUEST__VISITOR_TYPE],
                                     request_stored[request_store.REQUEST__EMAIL_ADDRESS],

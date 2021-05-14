@@ -25,7 +25,7 @@ class AccessKey():
         self.__type = self.TYPE_DS
         self.__access_code = AccessCode(access_code).value
         self.__dni = Dni(dni).value
-        access_request = AccessRequest.create_request_from_code(self.__access_code, self.__dni)
+        access_request = AccessRequest.create_request_from_code(self.__access_code, self.__access_code)
         self.__notification_emails = EmailList(notification_emails).value
         validity = access_request.validity
         #justnow = datetime.utcnow()
@@ -40,12 +40,12 @@ class AccessKey():
             self.__expiration_date = self.__issued_at + (validity * 30 * 24 * 60 *60)
         self.__key = hashlib.sha256(self.__signature_string().encode()).hexdigest()
 
-
     def __signature_string(self):
         """Composes the string to be used for generating the key"""
         return "{alg:"+self.__alg + ",typ:" + self.__type + ",accesscode:"\
                + self.__access_code+",issuedate:"+str(self.__issued_at)\
                + ",expirationdate:" + str(self.__expiration_date) + "}"
+
     @property
     def expiration_date(self):
         """expiration_date getter"""
@@ -100,7 +100,7 @@ class AccessKey():
         keys_store = KeysJsonStore()
         keys_store.add_item(self)
 
-    def is_valid( self ):
+    def is_valid(self):
         """Return true if the key is not expired"""
         justnow = datetime.utcnow()
         justnow_timestamp = datetime.timestamp(justnow)
@@ -109,18 +109,18 @@ class AccessKey():
             raise AccessManagementException("key is not found or is expired")
         return True
 
-
     @classmethod
-    def create_key_from_file( cls, key_file ):
+    def create_key_from_file(cls, key_file):
         """Class method from creating an instance of AccessKey
         from the content of a file according to RF2"""
         access_key_items = KeyJsonParser(key_file).json_content
+        print("Vamos a crear una instancia access_key")
         return cls(access_key_items[KeyJsonParser.DNI],
                    access_key_items[KeyJsonParser.ACCESS_CODE],
                    access_key_items[KeyJsonParser.MAIL_LIST])
 
     @classmethod
-    def create_key_from_id( cls, key ):
+    def create_key_from_id(cls, key):
         """Class method from creating an instance of AccessKey
         retrieving the information from the keys store"""
         keys_store = KeysJsonStore()

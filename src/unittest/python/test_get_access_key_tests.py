@@ -34,7 +34,6 @@ class TestAccessManager(unittest.TestCase):
                                                 "Guest", "uc3m@gmail.com", 5)
         print("Finished init")
 
-
     def test_parametrized_cases_tests( self ):
         """Parametrized cases read from testingCases_RF1.csv"""
         my_cases = JSON_FILES_PATH + "testingCases_RF2.csv"
