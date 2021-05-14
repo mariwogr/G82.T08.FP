@@ -9,7 +9,7 @@ class JsonParser():
     _key_list = []
     _key_error_message = "JSON Decode Error - Wrong label"
 
-    def __init__( self, file ):
+    def __init__(self, file):
         self._file = file
         self._json_content = self._parse_json_file()
         self._validate_json()
@@ -28,7 +28,7 @@ class JsonParser():
     def _validate_json(self):
         """validate the json keys"""
         for key in self._key_list:
-            if not key in self._json_content.keys():
+            if key not in self._json_content.keys():
                 raise AccessManagementException(self._key_error_message)
 
     @property

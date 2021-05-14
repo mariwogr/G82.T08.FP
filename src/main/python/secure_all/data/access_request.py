@@ -100,7 +100,8 @@ class AccessRequest:
         request_store = RequestJsonStore()
         request_stored = request_store.find_item(valor)
         if request_stored is None:
-            raise AccessManagementException(request_store.NOT_FOUND_IN_THE_STORE)
+            print("ojo piojo")
+            raise AccessManagementException(request_store.NOT_CORRECT_FOR_THIS_DNI)
 
         request_stored_object = cls(request_stored[request_store.REQUEST__ID_DOCUMENT],
                                     request_stored[request_store.REQUEST__NAME],
