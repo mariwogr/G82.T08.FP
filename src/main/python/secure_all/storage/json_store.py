@@ -3,7 +3,7 @@ import json
 from secure_all.exception.access_management_exception import AccessManagementException
 
 
-class JsonStore():
+class JsonStore:
     """Managest stores based on JsonFiles"""
     _FILE_PATH = ""
     _ID_FIELD = ""
@@ -12,12 +12,12 @@ class JsonStore():
         self._data_list = []
         self.load_store()
 
-    def empty_store( self ):
+    def empty_store(self):
         """empty the store"""
         self._data_list = []
         self.save_store()
 
-    def load_store( self ):
+    def load_store(self):
         """"Loads _data_list from the json file
         If the file is not found a new emtpy list is created """
         try:
@@ -37,11 +37,11 @@ class JsonStore():
         self.save_store()
 
     def find_item(self, key):
-        """find the value key in the _KEY_FIELD"""
+        """find the value key in the _ID_FIELD"""
         self.load_store()
         for item in self._data_list:
-            print("item key: ", item[self._ID_FIELD])
-            print("passed key: ", key)
+            # print("item key: ", item[self._ID_FIELD])
+            # print("passed key: ", key)
             if item[self._ID_FIELD] == key:
                 return item
         return None

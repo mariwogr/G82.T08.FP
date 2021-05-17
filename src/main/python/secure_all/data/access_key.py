@@ -13,7 +13,7 @@ from secure_all.storage.keys_json_store import KeysJsonStore
 from secure_all.parser.key_json_parser import KeyJsonParser
 
 
-class AccessKey():
+class AccessKey:
     """Class representing the key for accessing the building"""
     #pylint: disable=too-many-instance-attributes
 
@@ -25,19 +25,20 @@ class AccessKey():
         self.__type = self.TYPE_DS
         self.__access_code = AccessCode(access_code).value
         self.__dni = Dni(dni).value
-        access_request = AccessRequest.create_request_from_code(self.__access_code, self.__access_code)
+        access_request = AccessRequest.create_request_from_code(self.__access_code,
+                                                                self.__access_code)
         self.__notification_emails = EmailList(notification_emails).value
         validity = access_request.validity
         #justnow = datetime.utcnow()
         #self.__issued_at = datetime.timestamp(justnow)
         # fix self.__issued_at only for testing 13-3-2021 18_49
-        self.__issued_at=1615627129.580297
+        self.__issued_at = 1615627129.580297
         if validity == 0:
             self.__expiration_date = 0
         else:
-            #timestamp is represneted in seconds.microseconds
-            #validity must be expressed in senconds to be added to the timestap
-            self.__expiration_date = self.__issued_at + (validity * 30 * 24 * 60 *60)
+            # timestamp is represneted in seconds.microseconds
+            # validity must be expressed in senconds to be added to the timestap
+            self.__expiration_date = self.__issued_at + (validity * 30 * 24 * 60 * 60)
         self.__key = hashlib.sha256(self.__signature_string().encode()).hexdigest()
 
     def __signature_string(self):
@@ -60,6 +61,7 @@ class AccessKey():
     def dni(self):
         """Property that represents the dni of the visitor"""
         return self.dni
+
     @dni.setter
     def dni(self,value):
         """dni setter"""
@@ -98,10 +100,12 @@ class AccessKey():
     def store_keys(self):
         """Storing the key in the keys store """
         keys_store = KeysJsonStore()
+        print(self.__key)
         keys_store.add_item(self)
 
     def is_valid(self):
-        """Return true if the key is not expired"""
+        """Return true if the key is not expired, necessary when
+        trying to enter into the building"""
         justnow = datetime.utcnow()
         justnow_timestamp = datetime.timestamp(justnow)
         if not (self.__expiration_date == 0 or
@@ -114,7 +118,7 @@ class AccessKey():
         """Class method from creating an instance of AccessKey
         from the content of a file according to RF2"""
         access_key_items = KeyJsonParser(key_file).json_content
-        print("Vamos a crear una instancia access_key")
+        print(access_key_items)
         return cls(access_key_items[KeyJsonParser.DNI],
                    access_key_items[KeyJsonParser.ACCESS_CODE],
                    access_key_items[KeyJsonParser.MAIL_LIST])

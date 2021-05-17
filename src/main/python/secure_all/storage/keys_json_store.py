@@ -4,7 +4,7 @@ from secure_all.exception.access_management_exception import AccessManagementExc
 from secure_all.cfg.access_manager_config import JSON_FILES_PATH
 
 
-class KeysJsonStore():
+class KeysJsonStore:
     """Extends JsonStore """
     class __KeysJsonStore(JsonStore):
         #pylint: disable=invalid-name

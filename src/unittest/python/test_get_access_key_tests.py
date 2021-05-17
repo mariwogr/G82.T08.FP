@@ -9,7 +9,6 @@ from secure_all import AccessManager, AccessManagementException, \
 class TestAccessManager(unittest.TestCase):
     """Test class for testing get_access_key"""
 
-
     @classmethod
     def setUpClass(cls) -> None:
         """Removing the Stores and creating required AccessRequest for testing"""
@@ -44,18 +43,18 @@ class TestAccessManager(unittest.TestCase):
             keys_store = KeysJsonStore()
             for row in param_test_cases:
                 file_name = JSON_FILES_PATH + row["FILE"]
-                print("Param:" + row[ 'ID TEST' ] + row["VALID INVALID"])
-                if row["VALID INVALID"] ==  "VALID":
+                print("Param:" + row['ID TEST'] + row["VALID INVALID"])
+                if row["VALID INVALID"] == "VALID":
                     valor = my_code.get_access_key(file_name)
-                    self.assertEqual(row[ "EXPECTED RESULT" ], valor)
+                    self.assertEqual(row["EXPECTED RESULT"], valor)
                     print("el valor: " + valor)
                     generated_key = keys_store.find_item(valor)
-                    print(generated_key)
+                    print("generated_key: ", generated_key)
                     self.assertIsNotNone(generated_key)
                 else:
                     with self.assertRaises(AccessManagementException) as c_m:
                         my_code.get_access_key(file_name)
-                    self.assertEqual(c_m.exception.message, row[ "EXPECTED RESULT" ])
+                    self.assertEqual(c_m.exception.message, row["EXPECTED RESULT"])
 
 if __name__ == '__main__':
     unittest.main()
