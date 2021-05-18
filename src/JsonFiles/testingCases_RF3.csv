@@ -1,2 +1,37 @@
 VALID INVALID;ID TEST;FILE;EXPECTED RESULT
 VALID;RF3 1;good_open_door.json;True
+INVALID;RF3 2;double_node_1_open_door.json;error de decodificación
+INVALID;RF3 3;delete_node_1_open_door.json;error de decodificación
+INVALID;RF3 4;double_node_2_open_door.json;error de decodificación
+INVALID;RF3 5;delete_node_2_open_door.json;error de decodificación
+INVALID;RF3 6;double_node_3_open_door.json;error de decodificación
+INVALID;RF3 7;delete_node_3_open_door.json;no existe esa clave
+INVALID;RF3 8;double_node_4_open_door.json;error de decodificación
+INVALID;RF3 9;delete_node_4_open_door.json;error de decodificación
+INVALID;RF3 10;modify_node_5_open_door.json;error de decodificación
+INVALID;RF3 11;double_node_6_open_door.json;error de decodificación
+INVALID;RF3 12;delete_node_6_open_door.json;error de decodificación
+INVALID;RF3 13;double_node_7_open_door.json;error de decodificación
+INVALID;RF3 14;delete_node_7_open_door.json;error de decodificación
+INVALID;RF3 15;double_node_8_open_door.json;error de decodificación
+INVALID;RF3 16;delete_node_8_open_door.json;error de decodificación
+INVALID;RF3 17;modify_node_9_open_door.json;error de decodificación
+INVALID;RF3 18;double_node_10_open_door.json;error de decodificación
+INVALID;RF3 19;delete_node_10_open_door.json;error de decodificación
+INVALID;RF3 20;double_node_11_open_door.json;no existe esa clave
+INVALID;RF3 21;delete_node_11_open_door.json;no existe esa clave
+INVALID;RF3 22;double_node_13_open_door.json;error de decodificación
+INVALID;RF3 23;delete_node_13_open_door.json;error de decodificación
+INVALID;RF3 24;double_node_15_open_door.json;key invalid
+INVALID;RF3 25;delete_node_15_open_door.json;key invalid
+INVALID;RF3 26;modify_node_17_open_door.json;error de decodificación
+VALID;RF3 27;double_node_22_open_door.json;True
+INVALID;RF3 28;delete_node_22_open_door.json;no es un número
+INVALID;RF3 29;double_node_23_open_door.json;no es un número
+INVALID;RF3 30;delete_node_23_open_door.json;True
+INVALID;RF3 31;modify_node_25_open_door.json;error de decodificación
+INVALID;RF3 32;modify_node_26_open_door.json;no existe esa clave
+INVALID;RF3 33;modify_node_28_open_door.json;error de decodificación
+INVALID;RF3 34;modify_node_30_open_door.json;key invalid
+INVALID;RF3 35;modify_node_36_open_door.json;True
+INVALID;RF3 35;modify_node_37_open_door.json;no es un número
