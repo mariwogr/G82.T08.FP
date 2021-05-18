@@ -8,12 +8,10 @@ class AccessLogJsonStore:
     """Extends JsonStore """
     class __AccessLogJsonStore(JsonStore):
         #pylint: disable=invalid-name
-        ID_FIELD = "_AccessKey__key"
-        ACCESS_CODE = "_AccessKey__access_code"
-        DNI = "_AccessKey__dni"
-        MAIL_LIST = "_AccessKey__notification_emails"
-        INVALID_ITEM = "Invalid item to be stored as a key"
-        KEY_ALREADY_STORED = "key already found in storeRequest"
+        ID_FIELD = "_OpenDoor__code"
+        ACCESS_TIME = "_OpenDoor__access_time"
+        INVALID_ITEM = "Invalid item to be stored as a access register"
+        ACCESS_REGISTER_ALREADY_STORE = "Access register already found in storeOpenDoor"
 
         _FILE_PATH = JSON_FILES_PATH + "storeOpenDoor.json"
         _ID_FIELD = ID_FIELD
@@ -26,16 +24,16 @@ class AccessLogJsonStore:
             if not isinstance(item, OpenDoor):
                 raise AccessManagementException(self.INVALID_ITEM)
 
-            if not self.find_item(item.key) is None:
-                raise AccessManagementException(self.KEY_ALREADY_STORED)
-
+            if not self.find_item(item) is None:
+                raise AccessManagementException(self.ACCESS_REGISTER_ALREADY_STORE)
+            print("item: ", item)
             return super().add_item(item)
 
     __instance = None
 
     def __new__(cls):
         if not AccessLogJsonStore.__instance:
-            AccessLogJsonStore.__instance = AccessLogJsonStore.__KeysJsonStore()
+            AccessLogJsonStore.__instance = AccessLogJsonStore.__AccessLogJsonStore()
         return AccessLogJsonStore.__instance
 
     def __getattr__(self, nombre):
