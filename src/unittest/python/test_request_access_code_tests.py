@@ -37,6 +37,10 @@ class MyTestCase(unittest.TestCase):
                                                row["ACCESS TYPE"],  row["email"],
                                                int(row["VALIDITY"]))
                     self.assertDictEqual(generated_request.__dict__, my_request.__dict__)
+                    self.assertEqual("_AccessRequest__access_code" in
+                                     generated_request.__dict__.keys(), True)
+                    self.assertEqual(generated_request.__dict__
+                                     ["_AccessRequest__access_code"], valor)
                 else:
                     with self.assertRaises(AccessManagementException) as c_m:
                         valor = my_code.request_access_code(row["DNI"], row["NAME SURNAME"],
