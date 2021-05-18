@@ -1,2 +1,2 @@
 VALID INVALID;ID TEST;FILE;EXPECTED RESULT
-VALID;RF3 1;good_open_door.json;
+VALID;RF3 1;good_open_door.json;True

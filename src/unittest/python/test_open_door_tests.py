@@ -55,6 +55,7 @@ class TestAccessManager(unittest.TestCase):
         result = my_key.open_door\
             ("de000a04f3a9b1d15b07e38b166f00f3fb1bf46533f32ac37156faf43e47f722")
         self.assertEqual(True, result)
+        self.assertEqual(True, )
 
     def test_open_door_resident(self):
         """path: regex ok, key is found, expiration date is 0, resident"""
