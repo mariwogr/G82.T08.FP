@@ -2,8 +2,11 @@
 
 import unittest
 
-from secure_all import AccessManager, KeysJsonStore, RequestJsonStore, AccessLogJsonStore
+from secure_all import AccessManager, KeysJsonStore, RequestJsonStore,\
+    AccessLogJsonStore, Revocation
 from secure_all.data.attributes.attribute_dni import Dni
+
+# pylint:disable=too-many-locals
 
 
 class MyTestCase(unittest.TestCase):
@@ -42,6 +45,14 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(access_log_json_store_1, access_log_json_store_2)
         self.assertEqual(access_log_json_store_2, access_log_json_store_3)
         self.assertEqual(access_log_json_store_3, access_log_json_store_1)
+
+        revocation_1 = Revocation()
+        revocation_2 = Revocation()
+        revocation_3 = Revocation()
+
+        self.assertEqual(revocation_1, revocation_2)
+        self.assertEqual(revocation_2, revocation_3)
+        self.assertEqual(revocation_3, revocation_1)
 
         #probamos ahora que dos clases sin singleton devuelven
         #instancias distintas. Por ejemplo con DNI

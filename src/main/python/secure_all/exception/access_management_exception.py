@@ -1,5 +1,6 @@
 """Exception for the access_management module"""
 
+
 class AccessManagementException(Exception):
     """Personalised exception for Access Management"""
     def __init__(self, message):

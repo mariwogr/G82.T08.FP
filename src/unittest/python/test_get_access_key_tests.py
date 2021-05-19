@@ -21,17 +21,12 @@ class TestAccessManager(unittest.TestCase):
 
         # introduce a key valid and not expired and guest
         my_manager = AccessManager()
-        print("one")
         my_manager.request_access_code("05270358T", "Pedro Martin",
                                             "Resident", "uc3m@gmail.com", 0)
-        print("two")
         my_manager.request_access_code("87654123L", "Maria Montero",
                                             "Guest", "maria@uc3m.es", 15)
-
-        print("three")
         my_manager.request_access_code("53935158C", "Marta Lopez",
                                                 "Guest", "uc3m@gmail.com", 5)
-        print("Finished init")
 
     def test_parametrized_cases_tests( self ):
         """Parametrized cases read from testingCases_RF1.csv"""
@@ -47,9 +42,9 @@ class TestAccessManager(unittest.TestCase):
                 if row["VALID INVALID"] == "VALID":
                     valor = my_code.get_access_key(file_name)
                     self.assertEqual(row["EXPECTED RESULT"], valor)
-                    print("el valor: " + valor)
+                    # print("el valor: " + valor)
                     generated_key = keys_store.find_item(valor)
-                    print("generated_key: ", generated_key)
+                    # print("generated_key: ", generated_key)
                     self.assertIsNotNone(generated_key)
                 else:
                     with self.assertRaises(AccessManagementException) as c_m:

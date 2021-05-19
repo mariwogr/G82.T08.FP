@@ -1,10 +1,9 @@
 """Module AccessManager with AccessManager Class """
 
-import json
 from secure_all.data.access_key import AccessKey
 from secure_all.data.access_request import AccessRequest
 from secure_all.data.open_door import OpenDoor
-from secure_all import AccessManagementException, KeysJsonStore
+from secure_all.data.revocation import Revocation
 
 
 class AccessManager:
@@ -34,39 +33,7 @@ class AccessManager:
 
         def revoke_key(self, file):
             """Revokes the key"""
-            try:
-                with open(file, "r", encoding="utf-8", newline="") as json_file:
-                    data = json.load(json_file)
-            except FileNotFoundError as ex:
-                raise AccessManagementException\
-                    ("El archivo de entrada tiene algún problema \
-                     relacionado con su formato o con su acceso.") \
-                    from ex
-            except json.JSONDecodeError as ex:
-                raise AccessManagementException("JSON Decode Error - Wrong JSON Format") from ex
-
-            key = data["Key"]
-            revocation = data["Revocation"]
-
-            try:
-                AccessKey.create_key_from_id(key).is_valid()
-            except AccessManagementException as ex:
-                raise AccessManagementException(" La clave recibida ha caducado.") from ex
-
-            store = KeysJsonStore().find_item(key)
-
-            if store is None:
-                raise AccessManagementException("La clave recibida no existe")
-
-            emails = store["_AccessKey__notification_emails"]
-
-            if store["_AccessKey__revocation"]:
-                raise AccessManagementException("La clave fue revocada previamente por este método")
-
-
-
-
-
+            return Revocation().revocate(file)
 
     __instance = None
 

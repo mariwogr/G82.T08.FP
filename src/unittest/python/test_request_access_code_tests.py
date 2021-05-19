@@ -56,5 +56,6 @@ class MyTestCase(unittest.TestCase):
                                         "Resident", "test@test.com", "a")
         self.assertEqual(c_m.exception.message, "days invalid")
 
+
 if __name__ == '__main__':
     unittest.main()

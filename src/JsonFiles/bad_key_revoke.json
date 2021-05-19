@@ -1,0 +1,14 @@
+{
+  "_AccessKey__alg": "SHA-256",
+  "_AccessKey__type": "DS",
+  "_AccessKey__access_code": "d2a7ca3223cd13b9a61f0e092aaaa140",
+  "_AccessKey__dni": "53935158C",
+  "_AccessKey__notification_emails": [
+    "mail1@uc3m.es",
+    "mail2@uc3m.es"
+  ],
+  "_AccessKey__issued_at": 1615627129.580297,
+  "_AccessKey__expiration_date": 1628587129.580297,
+  "_AccessKey__revocation": false,
+  "_AccessKey__key": "130a34cc55f0c3dcd25719fb009b535d43b4fe3a3ffe196be97eda5e37f20ded"
+}

@@ -1,0 +1,7 @@
+VALID INVALID;ID TEST;FILE;EXPECTED RESULT
+INVALID;RF4 1;key_small_revoke.json;El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.
+VALID;RF4 2;key_active_revoke.json;["pepe@jose.com", "paco@francisco.com"]
+VALID;RF4 3;key_resident_revoke.json;["mos@toles.com", "fuenla@brada.com", "le@gan.es"]
+INVALID;RF4 4;key_expired_revoke.json;La clave recibida ha caducado
+INVALID;RF4 5;bad_key_revoke.json;La clave recibida no existe
+INVALID;RF4 6;key_already_revoke.json;La clave fue revocada previamente por este método

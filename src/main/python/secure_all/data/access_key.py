@@ -15,7 +15,7 @@ from secure_all.parser.key_json_parser import KeyJsonParser
 
 class AccessKey:
     """Class representing the key for accessing the building"""
-    #pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes
 
     ALG_SHA256 = "SHA-256"
     TYPE_DS = "DS"
@@ -29,8 +29,8 @@ class AccessKey:
                                                                 self.__access_code)
         self.__notification_emails = EmailList(notification_emails).value
         validity = access_request.validity
-        #justnow = datetime.utcnow()
-        #self.__issued_at = datetime.timestamp(justnow)
+        # justnow = datetime.utcnow()
+        # self.__issued_at = datetime.timestamp(justnow)
         # fix self.__issued_at only for testing 13-3-2021 18_49
         self.__issued_at = 1615627129.580297
         if validity == 0:
@@ -39,13 +39,15 @@ class AccessKey:
             # timestamp is represneted in seconds.microseconds
             # validity must be expressed in senconds to be added to the timestap
             self.__expiration_date = self.__issued_at + (validity * 30 * 24 * 60 * 60)
+        self.__revocation = False
         self.__key = hashlib.sha256(self.__signature_string().encode()).hexdigest()
 
     def __signature_string(self):
         """Composes the string to be used for generating the key"""
-        return "{alg:"+self.__alg + ",typ:" + self.__type + ",accesscode:"\
-               + self.__access_code+",issuedate:"+str(self.__issued_at)\
-               + ",expirationdate:" + str(self.__expiration_date) + "}"
+        return "{alg: "+self.__alg + ", typ: " + self.__type + ", access code: "\
+               + self.__access_code+", issue date: "+str(self.__issued_at)\
+               + ", expiration date: " + str(self.__expiration_date)\
+               + ", revoked: " + str(self.__revocation) + "}"
 
     @property
     def expiration_date(self):
@@ -83,7 +85,7 @@ class AccessKey:
         return self.__notification_emails
 
     @notification_emails.setter
-    def notification_emails( self, value ):
+    def notification_emails(self, value):
         """Setter for notification emails"""
         self.__notification_emails = value
 
@@ -100,7 +102,6 @@ class AccessKey:
     def store_keys(self):
         """Storing the key in the keys store """
         keys_store = KeysJsonStore()
-        print(self.__key)
         keys_store.add_item(self)
 
     def is_valid(self):

@@ -4,11 +4,10 @@ import csv
 import json
 
 from secure_all import AccessManager, AccessManagementException, \
-    AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore, AccessLogJsonStore, \
-    Key
+    AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore
 
 
-class TestOpenDoor(unittest.TestCase):
+class TestRevocation(unittest.TestCase):
     """test class for open_door"""
 
     # pylint: disable=no-member
@@ -23,10 +22,8 @@ class TestOpenDoor(unittest.TestCase):
         # remove the old storeKeys
         requests_store = RequestJsonStore()
         keys_store = KeysJsonStore()
-        access_log_store = AccessLogJsonStore()
         requests_store.empty_store()
         keys_store.empty_store()
-        access_log_store.empty_store()
         # introduce a key valid and not expired and guest
         my_manager = AccessManager()
         my_manager.request_access_code("05270358T", "Pedro Martin",
@@ -52,8 +49,9 @@ class TestOpenDoor(unittest.TestCase):
         my_key_expirated.store_keys()
 
         def test_parametrized_cases_tests(self):
+            return
             """Parametrized cases read from testingCases_RF3.csv"""
-            my_cases = JSON_FILES_PATH + "testingCases_RF3.csv"
+            my_cases = JSON_FILES_PATH + "testingCases_RF4.csv"
             with open(my_cases, newline='', encoding='utf-8') as csvfile:
                 # pylint: disable=no-member
                 param_test_cases = csv.DictReader(csvfile, delimiter=';')
@@ -61,64 +59,68 @@ class TestOpenDoor(unittest.TestCase):
                     file_name = JSON_FILES_PATH + row["FILE"]
                     print("Param:" + row['ID TEST'] + row["VALID INVALID"])
                     if row["VALID INVALID"] == "VALID":
-                        es_valido = self.validate_json_stored(file_name)
-                        self.assertEqual(True, es_valido)
+                        emails = my_manager.revoke_key(file_name)
+                        self.assertEqual(row["EXPECTED RESULT"], emails)
                     else:
                         with self.assertRaises(AccessManagementException) as c_m:
-                            self.validate_json_stored(file_name)
+                            my_manager.revoke_key(file_name)
                         self.assertEqual(c_m.exception.message, row["EXPECTED RESULT"])
 
-    def test_open_door_bad_key_regex(self):
+    def test_revoke_bad_key_regex(self):
         """
         #path: regex is not valid , key length is 63 chars
     """
         my_key = AccessManager()
         with self.assertRaises(AccessManagementException) as c_m:
-            my_key.open_door \
-                ("cc161c01a4bcca82e841b3446e2a3edb3539d72a3a7ec40a07d236998482906")
-        self.assertEqual("key invalid", c_m.exception.message)
+            my_key.revoke_key\
+                (JSON_FILES_PATH + "key_small_revoke.json")
+        self.assertEqual("El archivo de entrada tiene algún problema relacionado\
+                          con su formato o con su acceso.", c_m.exception.message)
 
-    def test_open_door_good(self):
+    def test_revoke_good(self):
         """
     # path: regex ok , key is found , key is not expired, guest
     """
         my_key = AccessManager()
-        result = my_key.open_door \
-            ("130ad1cc55f0c3dcd25719fb009b535d43b4fe3a3ffe196be97eda5e37f20ded")
-        self.assertEqual(True, result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
+        result = my_key.revoke_key(JSON_FILES_PATH + "key_active_revoke.json")
+        self.assertEqual(["pepe@jose.com", "paco@francisco.com"], result)
+        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json"))
 
-    def test_open_door_resident(self):
+    def test_revoke_resident(self):
         """
     # path: regex ok, key is found, expiration date is 0, resident
     """
         my_key = AccessManager()
-        result = my_key.open_door \
-            ("231795d640824b37db595b903ac7f68a77921f8673cbc31efe89e9062c0c864e")
-        self.assertEqual(True, result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
+        result = my_key.revoke_key(JSON_FILES_PATH + "key_resident_revoke.json")
+        self.assertEqual(["mos@toles.com", "fuenla@brada.com", "aran@juez.com"], result)
+        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json"))
 
-    def test_open_door_bad_key_is_not_found(self):
+    def test_revoke_key_expired(self):
         """
     # path: regex ok, key is not found
     """
         my_key = AccessManager()
         with self.assertRaises(AccessManagementException) as c_m:
-            my_key.open_door \
-                ("fff00d78646ed41a91d60ec2fc1ed326238e510134ca52e5d9b1de5cbdf2b8ab")
+            my_key.revoke(JSON_FILES_PATH + "key_expired_revoke.json")
+        self.assertEqual("La clave recibida ha caducado", c_m.exception.message)
 
-        self.assertEqual("key is not found or is expired", c_m.exception.message)
+    def test_revoke_bad_key_is_not_found(self):
+        """
+    # path: regex ok, key is not found
+    """
+        my_key = AccessManager()
+        with self.assertRaises(AccessManagementException) as c_m:
+            my_key.revoke(JSON_FILES_PATH + "bad_key_revoke.json")
+        self.assertEqual("La clave recibida no existe", c_m.exception.message)
 
-    def test_open_door_bad_key_is_expired(self):
+    def test_revoke_already_revoked(self):
         """
     # Expired key generated in the SetUpClass method
     """
         my_key = AccessManager()
         with self.assertRaises(AccessManagementException) as c_m:
-            my_key.open_door \
-                ("459063166d5a8e38ac493d4f523e31cca39bdc2c523d12dc08cae4a983224495")
-
-        self.assertEqual("key is not found or is expired", c_m.exception.message)
+            my_key.open_door(JSON_FILES_PATH + "key_already_revoke.json")
+        self.assertEqual("La clave fue revocada previamente por este método", c_m.exception.message)
 
     def validate_json_stored(self, file):
         """ Method to validate the access_log_json_store"""
@@ -126,12 +128,8 @@ class TestOpenDoor(unittest.TestCase):
             with open(file, 'r', encoding='utf-8', newline="") as checking_file:
                 data = json.load(checking_file)
                 for elem in data:
-                    if Key(elem["_OpenDoor__code"]).value:
-                        print("Success reading the code")
-                    if type(elem["_OpenDoor__access_time"]) in (float, int):
-                        print("success reading the time stamp")
-                    else:
-                        float(elem["_OpenDoor__access_time"])  # will raise a ValueError
+                    if not elem["_AccessKey__revocation"]:
+                        print("Success revoking")          # clave revocada con éxito
                 return True
         except FileNotFoundError as ex:
             raise AccessManagementException("not found") from ex
@@ -139,8 +137,6 @@ class TestOpenDoor(unittest.TestCase):
             raise AccessManagementException("error de decodificación") from ex
         except KeyError as ex:
             raise AccessManagementException("no existe esa clave") from ex
-        except ValueError as ex:
-            raise AccessManagementException("no es un número") from ex
 
 
 if __name__ == '__main__':
