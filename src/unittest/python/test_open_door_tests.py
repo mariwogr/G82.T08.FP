@@ -13,9 +13,6 @@ class TestOpenDoor(unittest.TestCase):
 
     # pylint: disable=no-member
     # pylint: disable=no-self-use
-    # pylint: disable=unused-variable
-
-    # unused variable nos lo da por los tests parametrizados, pero no podemos hacer nada con ello
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -51,22 +48,22 @@ class TestOpenDoor(unittest.TestCase):
         my_key_expirated.expiration_date = 0
         my_key_expirated.store_keys()
 
-        def test_parametrized_cases_tests(self):
-            """Parametrized cases read from testingCases_RF3.csv"""
-            my_cases = JSON_FILES_PATH + "testingCases_RF3.csv"
-            with open(my_cases, newline='', encoding='utf-8') as csvfile:
-                # pylint: disable=no-member
-                param_test_cases = csv.DictReader(csvfile, delimiter=';')
-                for row in param_test_cases:
-                    file_name = JSON_FILES_PATH + row["FILE"]
-                    print("Param:" + row['ID TEST'] + row["VALID INVALID"])
-                    if row["VALID INVALID"] == "VALID":
-                        es_valido = self.validate_json_stored(file_name)
-                        self.assertEqual(True, es_valido)
-                    else:
-                        with self.assertRaises(AccessManagementException) as c_m:
-                            self.validate_json_stored(file_name)
-                        self.assertEqual(c_m.exception.message, row["EXPECTED RESULT"])
+    def test_parametrized_cases_tests(self):
+        """Parametrized cases read from testingCases_RF3.csv"""
+        my_cases = JSON_FILES_PATH + "testingCases_RF3.csv"
+        with open(my_cases, newline='', encoding='utf-8') as csvfile:
+            # pylint: disable=no-member
+            param_test_cases = csv.DictReader(csvfile, delimiter=';')
+            for row in param_test_cases:
+                file_name = JSON_FILES_PATH + row["FILE"]
+                print("Param:" + row['ID TEST'] + row["VALID INVALID"])
+                if row["VALID INVALID"] == "VALID":
+                    es_valido = self.validate_json_stored(file_name)
+                    self.assertEqual(True, es_valido)
+                else:
+                    with self.assertRaises(AccessManagementException) as c_m:
+                        self.validate_json_stored(file_name)
+                    self.assertEqual(c_m.exception.message, row["EXPECTED RESULT"])
 
     def test_open_door_bad_key_regex(self):
         """
@@ -125,13 +122,23 @@ class TestOpenDoor(unittest.TestCase):
         try:
             with open(file, 'r', encoding='utf-8', newline="") as checking_file:
                 data = json.load(checking_file)
-                for elem in data:
-                    if Key(elem["_OpenDoor__code"]).value:
-                        print("Success reading the code")
-                    if type(elem["_OpenDoor__access_time"]) in (float, int):
-                        print("success reading the time stamp")
-                    else:
-                        float(elem["_OpenDoor__access_time"])  # will raise a ValueError
+                if isinstance(data, list):
+                    for elem in data:
+                        #print("elem: ", elem)
+                        if Key(elem["_OpenDoor__code"]).value:
+                            print("Success reading the code")
+                        if type(elem["_OpenDoor__access_time"]) in (float, int):
+                            print("success reading the time stamp")
+                        else:
+                            float(elem["_OpenDoor__access_time"])  # will raise a ValueError
+                    return True
+
+                if Key(data["_OpenDoor__code"]).value:
+                    print("Success reading the code")
+                if type(data["_OpenDoor__access_time"]) in (float, int):
+                    print("success reading the time stamp")
+                else:
+                    float(data["_OpenDoor__access_time"])  # will raise a ValueError
                 return True
         except FileNotFoundError as ex:
             raise AccessManagementException("not found") from ex
@@ -139,8 +146,6 @@ class TestOpenDoor(unittest.TestCase):
             raise AccessManagementException("error de decodificación") from ex
         except KeyError as ex:
             raise AccessManagementException("no existe esa clave") from ex
-        except ValueError as ex:
-            raise AccessManagementException("no es un número") from ex
 
 
 if __name__ == '__main__':
