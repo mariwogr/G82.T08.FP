@@ -2,6 +2,7 @@
 
 from secure_all.data.attributes.attribute import Attribute
 
+
 class Email(Attribute):
     """Class for validating emails according to a regex"""
     #pylint: disable=too-few-public-methods

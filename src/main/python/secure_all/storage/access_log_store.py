@@ -26,7 +26,6 @@ class AccessLogJsonStore:
 
             if not self.find_item(item) is None:
                 raise AccessManagementException(self.ACCESS_REGISTER_ALREADY_STORE)
-            print("item: ", item)
             return super().add_item(item)
 
     __instance = None

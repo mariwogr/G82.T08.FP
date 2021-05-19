@@ -63,7 +63,7 @@ class AccessKey:
         return self.dni
 
     @dni.setter
-    def dni(self,value):
+    def dni(self, value):
         """dni setter"""
         self.__dni = value
 
@@ -118,7 +118,6 @@ class AccessKey:
         """Class method from creating an instance of AccessKey
         from the content of a file according to RF2"""
         access_key_items = KeyJsonParser(key_file).json_content
-        # print(access_key_items)
         return cls(access_key_items[KeyJsonParser.DNI],
                    access_key_items[KeyJsonParser.ACCESS_CODE],
                    access_key_items[KeyJsonParser.MAIL_LIST])

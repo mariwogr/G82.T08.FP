@@ -33,13 +33,13 @@ class KeysJsonStore:
 
     __instance = None
 
-    def __new__( cls ):
+    def __new__(cls):
         if not KeysJsonStore.__instance:
             KeysJsonStore.__instance = KeysJsonStore.__KeysJsonStore()
         return KeysJsonStore.__instance
 
-    def __getattr__ ( self, nombre ):
+    def __getattr__(self, nombre):
         return getattr(self.__instance, nombre)
 
-    def __setattr__ ( self, nombre, valor ):
+    def __setattr__(self, nombre, valor):
         return setattr(self.__instance, nombre, valor)

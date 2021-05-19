@@ -1,5 +1,7 @@
 """Class for validating the full name"""
 from secure_all.data.attributes.attribute import Attribute
+
+
 class FullName(Attribute):
     """Class for validating the full name with a regex"""
     #pylint: disable=too-few-public-methods
