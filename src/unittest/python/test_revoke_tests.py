@@ -50,7 +50,7 @@ class TestRevocation(unittest.TestCase):
 
         def test_parametrized_cases_tests(self):
             return
-            """Parametrized cases read from testingCases_RF3.csv"""
+            """Parametrized cases read from testingCases_RF4.csv"""
             my_cases = JSON_FILES_PATH + "testingCases_RF4.csv"
             with open(my_cases, newline='', encoding='utf-8') as csvfile:
                 # pylint: disable=no-member
@@ -59,8 +59,14 @@ class TestRevocation(unittest.TestCase):
                     file_name = JSON_FILES_PATH + row["FILE"]
                     print("Param:" + row['ID TEST'] + row["VALID INVALID"])
                     if row["VALID INVALID"] == "VALID":
-                        emails = my_manager.revoke_key(file_name)
-                        self.assertEqual(row["EXPECTED RESULT"], emails)
+                        # ENSEÑAR A SERGIO
+                        if row["FIELD"] == "Revoking":
+                            emails = my_manager.revoke_key(file_name)
+                            self.assertEqual(row["EXPECTED RESULT"], emails)
+                        else:
+                            pass
+
+
                     else:
                         with self.assertRaises(AccessManagementException) as c_m:
                             my_manager.revoke_key(file_name)
@@ -84,7 +90,8 @@ class TestRevocation(unittest.TestCase):
         my_key = AccessManager()
         result = my_key.revoke_key(JSON_FILES_PATH + "key_active_revoke.json")
         self.assertEqual(["pepe@jose.com", "paco@francisco.com"], result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json"))
+        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json",
+                        "130ad1cc55f0c3dcd25719fb009b535d43b4fe3a3ffe196be97eda5e37f20ded"))
 
     def test_revoke_resident(self):
         """
@@ -92,8 +99,9 @@ class TestRevocation(unittest.TestCase):
     """
         my_key = AccessManager()
         result = my_key.revoke_key(JSON_FILES_PATH + "key_resident_revoke.json")
-        self.assertEqual(["mos@toles.com", "fuenla@brada.com", "aran@juez.com"], result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json"))
+        self.assertEqual(["mos@toles.com", "fuenla@brada.com", "le@gan.es"], result)
+        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json",
+                        "130ad1cc55f0c3dcd25719fb009b535d43b4fe3a3ffe196be97eda5e37f20ded"))
 
     def test_revoke_key_expired(self):
         """
@@ -122,15 +130,18 @@ class TestRevocation(unittest.TestCase):
             my_key.open_door(JSON_FILES_PATH + "key_already_revoke.json")
         self.assertEqual("La clave fue revocada previamente por este método", c_m.exception.message)
 
-    def validate_json_stored(self, file):
+    def validate_json_stored(self, file, key):
         """ Method to validate the access_log_json_store"""
         try:
             with open(file, 'r', encoding='utf-8', newline="") as checking_file:
                 data = json.load(checking_file)
                 for elem in data:
-                    if not elem["_AccessKey__revocation"]:
-                        print("Success revoking")          # clave revocada con éxito
-                return True
+                    if elem["_AccessKey__key"] == key:
+                        if elem["_AccessKey__revocation"]:
+                            print("Success revoking")
+                            return True         # clave revocada con éxito
+                        return False
+                return False
         except FileNotFoundError as ex:
             raise AccessManagementException("not found") from ex
         except json.JSONDecodeError as ex:

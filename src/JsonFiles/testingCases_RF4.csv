@@ -1,7 +1,22 @@
-VALID INVALID;ID TEST;FILE;EXPECTED RESULT
-INVALID;RF4 1;key_small_revoke.json;El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.
-VALID;RF4 2;key_active_revoke.json;["pepe@jose.com", "paco@francisco.com"]
-VALID;RF4 3;key_resident_revoke.json;["mos@toles.com", "fuenla@brada.com", "le@gan.es"]
-INVALID;RF4 4;key_expired_revoke.json;La clave recibida ha caducado
-INVALID;RF4 5;bad_key_revoke.json;La clave recibida no existe
-INVALID;RF4 6;key_already_revoke.json;La clave fue revocada previamente por este método
+FIELD;VALID INVALID;ID TEST;FILE;EXPECTED RESULT
+REVOKING;INVALID;RF4 1;key_small_revoke.json;El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.
+REVOKING;VALID;RF4 2;key_active_revoke.json;["pepe@jose.com", "paco@francisco.com"]
+REVOKING;VALID;RF4 3;key_resident_revoke.json;["mos@toles.com", "fuenla@brada.com", "le@gan.es"]
+REVOKING;INVALID;RF4 4;key_expired_revoke.json;La clave recibida ha caducado
+REVOKING;INVALID;RF4 5;bad_key_revoke.json;La clave recibida no existe
+REVOKING;INVALID;RF4 6;key_already_revoke.json;La clave fue revocada previamente por este método
+VALIDATING;VALID;RF5 7;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 8;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 9;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 10;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 11;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 12;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 13;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 14;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 15;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 16;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 17;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 18;all_good_revoke.json;True
+VALIDATING;INVALID;RF5 19;all_good_revoke.json;True
+
+
