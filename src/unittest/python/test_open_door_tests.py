@@ -4,13 +4,18 @@ import csv
 import json
 
 from secure_all import AccessManager, AccessManagementException, \
-    AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore, AccessLogJsonStore,\
+    AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore, AccessLogJsonStore, \
     Key
 
 
 class TestOpenDoor(unittest.TestCase):
     """test class for open_door"""
+
     # pylint: disable=no-member
+    # pylint: disable=no-self-use
+    # pylint: disable=unused-variable
+
+    # unused variable nos lo da por los tests parametrizados, pero no podemos hacer nada con ello
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -25,10 +30,10 @@ class TestOpenDoor(unittest.TestCase):
         # introduce a key valid and not expired and guest
         my_manager = AccessManager()
         my_manager.request_access_code("05270358T", "Pedro Martin",
-                                               "Resident", "uc3m@gmail.com", 0)
+                                       "Resident", "uc3m@gmail.com", 0)
 
         my_manager.request_access_code("53935158C", "Marta Lopez",
-                                               "Guest", "uc3m@gmail.com", 5)
+                                       "Guest", "uc3m@gmail.com", 5)
 
         my_manager.get_access_key(JSON_FILES_PATH + "key_ok.json")
 
@@ -56,14 +61,6 @@ class TestOpenDoor(unittest.TestCase):
                     file_name = JSON_FILES_PATH + row["FILE"]
                     print("Param:" + row['ID TEST'] + row["VALID INVALID"])
                     if row["VALID INVALID"] == "VALID":
-                        """
-                        valor = my_code.get_access_key(file_name)
-                        self.assertEqual(row["EXPECTED RESULT"], valor)
-                        print("el valor: " + valor)
-                        generated_key = keys_store.find_item(valor)
-                        print("generated_key: ", generated_key)
-                        self.assertIsNotNone(generated_key)
-                        """
                         es_valido = self.validate_json_stored(file_name)
                         self.assertEqual(True, es_valido)
                     else:
@@ -71,14 +68,13 @@ class TestOpenDoor(unittest.TestCase):
                             self.validate_json_stored(file_name)
                         self.assertEqual(c_m.exception.message, row["EXPECTED RESULT"])
 
-
     def test_open_door_bad_key_regex(self):
         """
         #path: regex is not valid , key length is 63 chars
     """
         my_key = AccessManager()
         with self.assertRaises(AccessManagementException) as c_m:
-            my_key.open_door\
+            my_key.open_door \
                 ("cc161c01a4bcca82e841b3446e2a3edb3539d72a3a7ec40a07d236998482906")
         self.assertEqual("key invalid", c_m.exception.message)
 
@@ -87,7 +83,7 @@ class TestOpenDoor(unittest.TestCase):
     # path: regex ok , key is found , key is not expired, guest
     """
         my_key = AccessManager()
-        result = my_key.open_door\
+        result = my_key.open_door \
             ("de000a04f3a9b1d15b07e38b166f00f3fb1bf46533f32ac37156faf43e47f722")
         self.assertEqual(True, result)
         self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
@@ -97,9 +93,10 @@ class TestOpenDoor(unittest.TestCase):
     # path: regex ok, key is found, expiration date is 0, resident
     """
         my_key = AccessManager()
-        result = my_key.open_door\
+        result = my_key.open_door \
             ("de000a04f3a9b1d15b07e38b166f00f3fb1bf46533f32ac37156faf43e47f722")
         self.assertEqual(True, result)
+        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
 
     def test_open_door_bad_key_is_not_found(self):
         """
@@ -107,7 +104,7 @@ class TestOpenDoor(unittest.TestCase):
     """
         my_key = AccessManager()
         with self.assertRaises(AccessManagementException) as c_m:
-            my_key.open_door\
+            my_key.open_door \
                 ("fff00d78646ed41a91d60ec2fc1ed326238e510134ca52e5d9b1de5cbdf2b8ab")
 
         self.assertEqual("key is not found or is expired", c_m.exception.message)
@@ -118,12 +115,13 @@ class TestOpenDoor(unittest.TestCase):
     """
         my_key = AccessManager()
         with self.assertRaises(AccessManagementException) as c_m:
-            my_key.open_door\
+            my_key.open_door \
                 ("459063166d5a8e38ac493d4f523e31cca39bdc2c523d12dc08cae4a983224495")
 
         self.assertEqual("key is not found or is expired", c_m.exception.message)
 
     def validate_json_stored(self, file):
+        """ Method to validate the access_log_json_store"""
         try:
             with open(file, 'r', encoding='utf-8', newline="") as checking_file:
                 data = json.load(checking_file)
@@ -143,6 +141,7 @@ class TestOpenDoor(unittest.TestCase):
             raise AccessManagementException("no existe esa clave") from ex
         except ValueError as ex:
             raise AccessManagementException("no es un número") from ex
+
 
 if __name__ == '__main__':
     unittest.main()
