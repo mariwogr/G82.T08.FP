@@ -50,6 +50,15 @@ class AccessKey:
                + ", revoked: " + str(self.__revocation) + "}"
 
     @property
+    def revocation(self):
+        """ returns the revocation"""
+        return self.__revocation
+
+    @revocation.setter
+    def revocation(self, value):
+        self.__revocation = value
+
+    @property
     def expiration_date(self):
         """expiration_date getter"""
         return self.__expiration_date

@@ -24,27 +24,30 @@ class Revocation:
                     data = json.load(json_file)
             except FileNotFoundError as ex:
                 raise AccessManagementException\
-                    ("El archivo de entrada tiene algún problema \
-                     relacionado con su formato o con su acceso.") from ex
+                    ("El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.") from ex
             except json.JSONDecodeError as ex:
                 raise AccessManagementException("JSON Decode Error - Wrong JSON Format") from ex
 
             key = data["Key"]
+            store = KeysJsonStore()
             try:
-                AccessKey.create_key_from_id(key).is_valid()
+                found_key = AccessKey.create_key_from_id(key)
+                found_key.is_valid()
             except AccessManagementException as ex:
+                if ex.message == "key invalid":
+                    raise AccessManagementException("El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.")
                 raise AccessManagementException("La clave recibida ha caducado") from ex
 
-            store = KeysJsonStore().find_item(key)
-
-            if store is None:
+            if found_key is None:
                 raise AccessManagementException("La clave recibida no existe")
 
-            if store["_AccessKey__revocation"]:
+            if found_key.revocation:
                 raise AccessManagementException("La clave fue revocada previamente por este método")
-            store["_AccessKey__revocation"] = True
+            found_key.revocation = True
 
-            emails = store["_AccessKey__notification_emails"]
+            emails = found_key.notification_emails
+            store.delete_item(found_key.key)
+            store.add_item(found_key)
             store.save_store()
             return emails
 

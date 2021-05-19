@@ -33,7 +33,10 @@ class JsonStore:
         Since this is a generic class further verifications should be included
         in the specific stores"""
         self.load_store()
-        self._data_list.append(item.__dict__)
+        if isinstance(item, dict):
+            self._data_list.append(item)
+        else:
+            self._data_list.append(item.__dict__)
         self.save_store()
 
     def find_item(self, key):
@@ -42,6 +45,16 @@ class JsonStore:
         for item in self._data_list:
             if item[self._ID_FIELD] == key:
                 return item
+        return None
+
+    def delete_item(self, key):
+        """ deletes a register"""
+        self.load_store()
+        for item in self._data_list:
+            if item[self._ID_FIELD] == key:
+                self._data_list.remove(item)
+                "aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        self.save_store()
         return None
 
     def save_store(self):
