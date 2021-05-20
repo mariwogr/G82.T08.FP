@@ -130,7 +130,7 @@ class TestOpenDoor(unittest.TestCase):
                         if type(elem["_OpenDoor__access_time"]) in (float, int):
                             print("success reading the time stamp")
                         else:
-                            float(elem["_OpenDoor__access_time"])  # will raise a ValueError
+                            raise AccessManagementException("Marca de tiempo no válida")  # will raise a ValueError
                     return True
 
                 if Key(data["_OpenDoor__code"]).value:

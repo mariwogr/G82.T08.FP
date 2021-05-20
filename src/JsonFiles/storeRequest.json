@@ -25,14 +25,5 @@
     "_AccessRequest__validity": 2,
     "_AccessRequest__time_stamp": 1614962381.90867,
     "_AccessRequest__access_code": "383a8eb306459919ef0dc819405f16a6"
-  },
-  {
-    "_AccessRequest__id_document": "36004035L",
-    "_AccessRequest__name": "Horacio Pancracio",
-    "_AccessRequest__visitor_type": "Resident",
-    "_AccessRequest__email_address": "uc3m@gmail.com",
-    "_AccessRequest__validity": 0,
-    "_AccessRequest__time_stamp": 1614962381.90867,
-    "_AccessRequest__access_code": "854254fc24351ee3243309abcbc80490"
   }
 ]
