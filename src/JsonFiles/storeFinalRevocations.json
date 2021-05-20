@@ -11,31 +11,5 @@
     "_AccessKey__issued_at": 1615627129.580297,
     "_AccessKey__expiration_date": 0,
     "_AccessKey__key": "8b12b63a1584bac6c17cf1dab038b94c24410d41deaa59b734973e4b5b84c380"
-  },
-  {
-    "_AccessKey__alg": "SHA-256",
-    "_AccessKey__type": "DS",
-    "_AccessKey__access_code": "d2a7ca3223cd13b9a61f0e092aaaa140",
-    "_AccessKey__dni": "53935158C",
-    "_AccessKey__notification_emails": [
-      "mail1@uc3m.es",
-      "mail2@uc3m.es"
-    ],
-    "_AccessKey__issued_at": 1615627129.580297,
-    "_AccessKey__expiration_date": 1628587129.580297,
-    "_AccessKey__key": "45c3583c3ef003409dfb2d128853e19979b8d70a1dd9ca25d3e974524a1e4658"
-  },
-  {
-    "_AccessKey__alg": "SHA-256",
-    "_AccessKey__type": "DS",
-    "_AccessKey__access_code": "fdf839d5e6ac1c6b7ce0625577a80568",
-    "_AccessKey__dni": "05270358T",
-    "_AccessKey__notification_emails": [
-      "mail1@uc3m.es",
-      "mail2@uc3m.es"
-    ],
-    "_AccessKey__issued_at": 1615627129.580297,
-    "_AccessKey__expiration_date": 0,
-    "_AccessKey__key": "b51e91628f8a8c5b17e35b813782799511b8af743a09ef6f12c573345455f79e"
   }
 ]

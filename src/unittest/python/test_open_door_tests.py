@@ -81,7 +81,7 @@ class TestOpenDoor(unittest.TestCase):
     """
         my_key = AccessManager()
         result = my_key.open_door \
-            ("130ad1cc55f0c3dcd25719fb009b535d43b4fe3a3ffe196be97eda5e37f20ded")
+            ("45c3583c3ef003409dfb2d128853e19979b8d70a1dd9ca25d3e974524a1e4658")
         self.assertEqual(True, result)
         self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
 
@@ -91,7 +91,7 @@ class TestOpenDoor(unittest.TestCase):
     """
         my_key = AccessManager()
         result = my_key.open_door \
-            ("231795d640824b37db595b903ac7f68a77921f8673cbc31efe89e9062c0c864e")
+            ("b51e91628f8a8c5b17e35b813782799511b8af743a09ef6f12c573345455f79e")
         self.assertEqual(True, result)
         self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
 
