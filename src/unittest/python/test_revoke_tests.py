@@ -100,7 +100,7 @@ class TestRevocation(unittest.TestCase):
         result = my_key.revoke_key(JSON_FILES_PATH + "key_resident_revoke.json")
         self.assertEqual(["mail1@uc3m.es", "mail2@uc3m.es"], result)
         self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json",
-                        "130ad1cc55f0c3dcd25719fb009b535d43b4fe3a3ffe196be97eda5e37f20ded"))
+                        "231795d640824b37db595b903ac7f68a77921f8673cbc31efe89e9062c0c864e"))
 
     def test_revoke_key_expired(self):
         """
