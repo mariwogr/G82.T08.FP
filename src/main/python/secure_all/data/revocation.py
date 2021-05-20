@@ -105,6 +105,22 @@ class Revocation:
             except KeyError as ex:
                 raise AccessManagementException("Error al descodificar json") from ex
 
+        def validate_json_stored(self, file, key):
+            """ Method to validate the access_log_json_store"""
+            try:
+                with open(file, 'r', encoding='utf-8', newline="") as checking_file:
+                    data = json.load(checking_file)
+                    for elem in data:
+                        if elem["_AccessKey__key"] == key:
+                            return True  # clave revocada con éxito
+                    raise AccessManagementException("La clave fue revocada previamente por este método")
+            except FileNotFoundError as ex:
+                raise AccessManagementException("not found") from ex
+            except json.JSONDecodeError as ex:
+                raise AccessManagementException("error de decodificación") from ex
+            except KeyError as ex:
+                raise AccessManagementException("no existe esa clave") from ex
+
 
 
 

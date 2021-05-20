@@ -101,7 +101,7 @@ class TestRevocation(unittest.TestCase):
         my_key = AccessManager()
         result = my_key.revoke_key(JSON_FILES_PATH + "key_active_revoke.json")
         self.assertEqual(["mail1@uc3m.es", "mail2@uc3m.es"], result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
+        self.assertEqual(True, Revocation().validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
                         "45c3583c3ef003409dfb2d128853e19979b8d70a1dd9ca25d3e974524a1e4658"))
 
     def test_revoke_resident(self):
@@ -111,7 +111,7 @@ class TestRevocation(unittest.TestCase):
         my_key = AccessManager()
         result = my_key.revoke_key(JSON_FILES_PATH + "key_resident_revoke.json")
         self.assertEqual(["mail1@uc3m.es", "mail2@uc3m.es"], result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
+        self.assertEqual(True, Revocation().validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
                         "b51e91628f8a8c5b17e35b813782799511b8af743a09ef6f12c573345455f79e"))
 
     def test_revoke_key_expired(self):
@@ -140,22 +140,6 @@ class TestRevocation(unittest.TestCase):
         with self.assertRaises(AccessManagementException) as c_m:
             my_key.revoke_key(JSON_FILES_PATH + "key_already_revoke.json")
         self.assertEqual("La clave recibida ha caducado", c_m.exception.message)
-
-    def validate_json_stored(self, file, key):
-        """ Method to validate the access_log_json_store"""
-        try:
-            with open(file, 'r', encoding='utf-8', newline="") as checking_file:
-                data = json.load(checking_file)
-                for elem in data:
-                    if elem["_AccessKey__key"] == key:
-                        return True         # clave revocada con éxito
-                raise AccessManagementException("La clave fue revocada previamente por este método")
-        except FileNotFoundError as ex:
-            raise AccessManagementException("not found") from ex
-        except json.JSONDecodeError as ex:
-            raise AccessManagementException("error de decodificación") from ex
-        except KeyError as ex:
-            raise AccessManagementException("no existe esa clave") from ex
 
 
 if __name__ == '__main__':
