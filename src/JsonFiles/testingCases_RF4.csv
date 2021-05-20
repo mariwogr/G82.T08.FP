@@ -1,22 +1,45 @@
-FIELD;VALID INVALID;ID TEST;FILE;EXPECTED RESULT
-REVOKING;INVALID;RF4 1;key_small_revoke.json;El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.
-REVOKING;VALID;RF4 2;key_active_revoke.json;["pepe@jose.com", "paco@francisco.com"]
-REVOKING;VALID;RF4 3;key_resident_revoke.json;["mos@toles.com", "fuenla@brada.com", "le@gan.es"]
-REVOKING;INVALID;RF4 4;key_expired_revoke.json;La clave recibida ha caducado
-REVOKING;INVALID;RF4 5;bad_key_revoke.json;La clave recibida no existe
-REVOKING;INVALID;RF4 6;key_already_revoke.json;La clave fue revocada previamente por este método
-VALIDATING;VALID;RF5 7;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 8;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 9;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 10;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 11;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 12;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 13;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 14;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 15;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 16;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 17;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 18;all_good_revoke.json;True
-VALIDATING;INVALID;RF5 19;all_good_revoke.json;True
+VALID INVALID;ID TEST;FILE;EXPECTED RESULT
+VALID;RF4 1;all_good_revoke.json;True
+INVALID;RF4 2;delete_1_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 3;double_1_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 4;delete_2_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 5;double_2_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 6;delete_3_revoke.json;Error al descodificar json
+INVALID;RF4 7;double_3_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 8;delete_4_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 9;double_4_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 10;modify_5_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 11;delete_6_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 12;double_6_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 13;delete_7_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 14;double_7_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 15;delete_8_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 16;double_8_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 17;delete_9_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 18;double_9_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 19;delete_10_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 20;double_10_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 21;modify_11_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 22;delete_12_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 23;double_12_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 24;delete_13_revoke.json;Error al descodificar json
+INVALID;RF4 25;double_13_revoke.json;Error al descodificar json
+INVALID;RF4 26;delete_15_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 27;double_15_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 28;delete_17_revoke.json;key invalid
+INVALID;RF4 29;double_17_revoke.json;key invalid
+INVALID;RF4 30;modify_19_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 31;delete_25_revoke.json;revocation type invalid
+INVALID;RF4 32;double_25_revoke.json;revocation type invalid
+INVALID;RF4 33;delete_34_revoke.json;reason invalid
+VALID;RF4 34;double_34_revoke.json;True
+INVALID;RF4 35;modify_36_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 36;modify_37_revoke.json;Error al descodificar json
+INVALID;RF4 37;modify_39_revoke.json;JSON Decode Error - Wrong JSON Format
+INVALID;RF4 38;modify_41_revoke.json;key invalid
+INVALID;RF4 39;modify_48_revoke.json;revocation type invalid
+VALID;RF4 40;modify_55_revoke.json;True
+
+
 
 

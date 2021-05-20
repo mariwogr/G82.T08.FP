@@ -7,6 +7,9 @@ from secure_all.data.access_key import AccessKey
 from secure_all.storage.keys_json_store import KeysJsonStore
 from secure_all.storage.temporal_revocations_json_store import TemporalRevocationsJsonStore
 from secure_all.storage.final_revocations_json_store import FinalRevocationsJsonStore
+from secure_all.data.attributes.attribute_key import Key
+from secure_all.data.attributes.attribute_revocation import Revoc
+from secure_all.data.attributes.attribute_reason import Reason
 
 # pylint:disable=invalid-name
 # pylint:disable=no-self-use
@@ -32,7 +35,6 @@ class Revocation:
 
             try:
                 key = data["Key"]
-                print("key: ", key)
             except KeyError as ex:
                 raise AccessManagementException("La clave recibida no existe") from ex
 
@@ -41,7 +43,6 @@ class Revocation:
                 found_key = AccessKey.create_key_from_id(key)
                 found_key.is_valid()
             except AccessManagementException as ex:
-                print(ex.message)
                 if ex.message == "key invalid":
                     raise AccessManagementException("El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.")
                 raise AccessManagementException("La clave recibida ha caducado") from ex
@@ -81,6 +82,32 @@ class Revocation:
             print(store.__dict__)
             """
             return emails
+
+        def is_valid(self, file):
+            try:
+                with open(file, "r", encoding="utf-8", newline="") as json_file:
+                    data = json.load(json_file)
+            except FileNotFoundError as ex:
+                raise AccessManagementException \
+                    (
+                    "El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.") from ex
+            except json.JSONDecodeError as ex:
+                raise AccessManagementException("JSON Decode Error - Wrong JSON Format") from ex
+
+            try:
+                print(data["Key"])
+                key = Key(data["Key"]).value
+                revocation = Revoc(data["Revocation"]).value
+                reason = Reason(data["Reason"]).value
+
+                return True
+
+            except KeyError as ex:
+                raise AccessManagementException("Error al descodificar json") from ex
+
+
+
+
 
     __instance = None
 

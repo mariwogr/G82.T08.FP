@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_revoke_tests.TestRevocation-20210520175358" tests="7" file="test_revoke_tests.py" time="0.044" timestamp="2021-05-20T17:53:59" failures="0" errors="0" skipped="0">
+	<testcase classname="test_revoke_tests.TestRevocation" name="test_parametrized_cases_tests" time="0.023" timestamp="2021-05-20T17:53:59"/>
+	<testcase classname="test_revoke_tests.TestRevocation" name="test_revoke_already_revoked" time="0.002" timestamp="2021-05-20T17:53:59"/>
+	<testcase classname="test_revoke_tests.TestRevocation" name="test_revoke_bad_key_is_not_found" time="0.001" timestamp="2021-05-20T17:53:59"/>
+	<testcase classname="test_revoke_tests.TestRevocation" name="test_revoke_bad_key_regex" time="0.002" timestamp="2021-05-20T17:53:59"/>
+	<testcase classname="test_revoke_tests.TestRevocation" name="test_revoke_good" time="0.006" timestamp="2021-05-20T17:53:59"/>
+	<testcase classname="test_revoke_tests.TestRevocation" name="test_revoke_key_expired" time="0.003" timestamp="2021-05-20T17:53:59"/>
+	<testcase classname="test_revoke_tests.TestRevocation" name="test_revoke_resident" time="0.007" timestamp="2021-05-20T17:53:59"/>
+</testsuite>

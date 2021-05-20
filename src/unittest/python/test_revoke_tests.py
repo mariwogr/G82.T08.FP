@@ -7,6 +7,7 @@ from secure_all import AccessManager, AccessManagementException, \
     AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore
 from secure_all.storage.final_revocations_json_store import FinalRevocationsJsonStore
 from secure_all.storage.temporal_revocations_json_store import TemporalRevocationsJsonStore
+from secure_all.data.revocation import Revocation
 
 class TestRevocation(unittest.TestCase):
     """test class for open_door"""
@@ -68,7 +69,6 @@ class TestRevocation(unittest.TestCase):
 
 
     def test_parametrized_cases_tests(self):
-        return
         """Parametrized cases read from testingCases_RF4.csv"""
         my_cases = JSON_FILES_PATH + "testingCases_RF4.csv"
         with open(my_cases, newline='', encoding='utf-8') as csvfile:
@@ -78,17 +78,10 @@ class TestRevocation(unittest.TestCase):
                 file_name = JSON_FILES_PATH + row["FILE"]
                 print("Param:" + row['ID TEST'] + row["VALID INVALID"])
                 if row["VALID INVALID"] == "VALID":
-                    # ENSEÑAR A SERGIO
-                    if row["FIELD"] == "Revoking":
-                        emails = my_manager.revoke_key(file_name)
-                        self.assertEqual(row["EXPECTED RESULT"], emails)
-                    else:
-                        pass
-
-
+                    self.assertEqual(row["EXPECTED RESULT"], str(Revocation().is_valid(file_name)))
                 else:
                     with self.assertRaises(AccessManagementException) as c_m:
-                        my_manager.revoke_key(file_name)
+                        Revocation().is_valid(file_name)
                     self.assertEqual(c_m.exception.message, row["EXPECTED RESULT"])
 
     def test_revoke_bad_key_regex(self):
