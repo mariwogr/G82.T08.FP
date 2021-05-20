@@ -5,7 +5,8 @@ import json
 
 from secure_all import AccessManager, AccessManagementException, \
     AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore
-
+from secure_all.storage.final_revocations_json_store import FinalRevocationsJsonStore
+from secure_all.storage.temporal_revocations_json_store import TemporalRevocationsJsonStore
 
 class TestRevocation(unittest.TestCase):
     """test class for open_door"""
@@ -22,6 +23,10 @@ class TestRevocation(unittest.TestCase):
         # remove the old storeKeys
         requests_store = RequestJsonStore()
         keys_store = KeysJsonStore()
+        final_rev_store = FinalRevocationsJsonStore()
+        temp_rev_store = TemporalRevocationsJsonStore()
+        final_rev_store.empty_store()
+        temp_rev_store.empty_store()
         requests_store.empty_store()
         keys_store.empty_store()
         # introduce a key valid and not expired and guest
@@ -33,9 +38,11 @@ class TestRevocation(unittest.TestCase):
                                        "Guest", "uc3m@gmail.com", 5)
 
         my_manager.get_access_key(JSON_FILES_PATH + "key_ok.json")
+        #print("primera ki: ", ki)
 
         # introduce a key valid and expiration date = 0 , resident
         my_manager.get_access_key(JSON_FILES_PATH + "key_ok3_resident.json")
+        #print("segunda ki: ", ki2)
 
         # introduce a key expirated, I need to change expiration date before to store the key
         my_manager.request_access_code("68026939T", "Juan Perez",
@@ -45,8 +52,20 @@ class TestRevocation(unittest.TestCase):
         my_key_expirated = AccessKey.create_key_from_file(JSON_FILES_PATH +
                                                           "key_ok_testing_expired.json")
         # We manipulate the expiration date to obtain an expired AccessKey
-        # my_key_expirated.expiration_date = 0
-        # my_key_expirated.store_keys()
+        #print("tercera ki: ", my_key_expirated.key)
+        my_key_expirated.expiration_date = 0
+        my_key_expirated.store_keys()
+
+        # We create an already revoked in set up method key
+
+        my_manager.request_access_code("36004035L", "Horacio Pancracio",
+                                       "Resident", "uc3m@gmail.com", 0)
+
+        my_manager.get_access_key(JSON_FILES_PATH + "key_to_revoke.json")
+
+        my_manager.revoke_key(JSON_FILES_PATH + "key_already_revoke.json")
+
+
 
     def test_parametrized_cases_tests(self):
         return
@@ -89,8 +108,8 @@ class TestRevocation(unittest.TestCase):
         my_key = AccessManager()
         result = my_key.revoke_key(JSON_FILES_PATH + "key_active_revoke.json")
         self.assertEqual(["mail1@uc3m.es", "mail2@uc3m.es"], result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json",
-                        "130ad1cc55f0c3dcd25719fb009b535d43b4fe3a3ffe196be97eda5e37f20ded"))
+        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
+                        "45c3583c3ef003409dfb2d128853e19979b8d70a1dd9ca25d3e974524a1e4658"))
 
     def test_revoke_resident(self):
         """
@@ -99,8 +118,8 @@ class TestRevocation(unittest.TestCase):
         my_key = AccessManager()
         result = my_key.revoke_key(JSON_FILES_PATH + "key_resident_revoke.json")
         self.assertEqual(["mail1@uc3m.es", "mail2@uc3m.es"], result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeKeys.json",
-                        "231795d640824b37db595b903ac7f68a77921f8673cbc31efe89e9062c0c864e"))
+        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
+                        "b51e91628f8a8c5b17e35b813782799511b8af743a09ef6f12c573345455f79e"))
 
     def test_revoke_key_expired(self):
         """
@@ -127,7 +146,7 @@ class TestRevocation(unittest.TestCase):
         my_key = AccessManager()
         with self.assertRaises(AccessManagementException) as c_m:
             my_key.revoke_key(JSON_FILES_PATH + "key_already_revoke.json")
-        self.assertEqual("La clave fue revocada previamente por este método", c_m.exception.message)
+        self.assertEqual("La clave recibida ha caducado", c_m.exception.message)
 
     def validate_json_stored(self, file, key):
         """ Method to validate the access_log_json_store"""
@@ -136,10 +155,7 @@ class TestRevocation(unittest.TestCase):
                 data = json.load(checking_file)
                 for elem in data:
                     if elem["_AccessKey__key"] == key:
-                        if elem["_AccessKey__revocation"]:
-                            print("Success revoking")
-                            return True         # clave revocada con éxito
-                        raise AccessManagementException("La clave fue revocada previamente por este método")
+                        return True         # clave revocada con éxito
                 raise AccessManagementException("La clave fue revocada previamente por este método")
         except FileNotFoundError as ex:
             raise AccessManagementException("not found") from ex

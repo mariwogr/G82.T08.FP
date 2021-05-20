@@ -43,6 +43,7 @@ class JsonStore:
         """find the value key in the _ID_FIELD"""
         self.load_store()
         for item in self._data_list:
+            #print("item: ", item)
             if item[self._ID_FIELD] == key:
                 return item
         return None

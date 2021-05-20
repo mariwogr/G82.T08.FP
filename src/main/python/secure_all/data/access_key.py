@@ -39,7 +39,6 @@ class AccessKey:
             # timestamp is represneted in seconds.microseconds
             # validity must be expressed in senconds to be added to the timestap
             self.__expiration_date = self.__issued_at + (validity * 30 * 24 * 60 * 60)
-        self.__revocation = False
         self.__key = hashlib.sha256(self.__signature_string().encode()).hexdigest()
 
     def __signature_string(self):
@@ -47,16 +46,7 @@ class AccessKey:
         return "{alg: "+self.__alg + ", typ: " + self.__type + ", access code: "\
                + self.__access_code+", issue date: "+str(self.__issued_at)\
                + ", expiration date: " + str(self.__expiration_date)\
-               + ", revoked: " + str(self.__revocation) + "}"
-
-    @property
-    def revocation(self):
-        """ returns the revocation"""
-        return self.__revocation
-
-    @revocation.setter
-    def revocation(self, value):
-        self.__revocation = value
+               + "}"
 
     @property
     def expiration_date(self):
