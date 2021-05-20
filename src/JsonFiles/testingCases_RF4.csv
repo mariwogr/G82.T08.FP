@@ -38,7 +38,7 @@ INVALID;RF4 36;modify_37_revoke.json;Error al descodificar json
 INVALID;RF4 37;modify_39_revoke.json;JSON Decode Error - Wrong JSON Format
 INVALID;RF4 38;modify_41_revoke.json;key invalid
 INVALID;RF4 39;modify_48_revoke.json;revocation type invalid
-VALID;RF4 40;modify_55_revoke.json;True
+INVALID;RF4 40;modify_55_revoke.json;reason invalid
 
 
 
