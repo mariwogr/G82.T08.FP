@@ -9,14 +9,12 @@ from secure_all.storage.final_revocations_json_store import FinalRevocationsJson
 from secure_all.storage.temporal_revocations_json_store import TemporalRevocationsJsonStore
 from secure_all.data.revocation import Revocation
 
+
 class TestRevocation(unittest.TestCase):
     """test class for open_door"""
 
     # pylint: disable=no-member
     # pylint: disable=no-self-use
-    # pylint: disable=unused-variable
-
-    # unused variable nos lo da por los tests parametrizados, pero no podemos hacer nada con ello
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -39,11 +37,11 @@ class TestRevocation(unittest.TestCase):
                                        "Guest", "uc3m@gmail.com", 5)
 
         my_manager.get_access_key(JSON_FILES_PATH + "key_ok.json")
-        #print("primera ki: ", ki)
+        # print("primera ki: ", ki)
 
         # introduce a key valid and expiration date = 0 , resident
         my_manager.get_access_key(JSON_FILES_PATH + "key_ok3_resident.json")
-        #print("segunda ki: ", ki2)
+        # print("segunda ki: ", ki2)
 
         # introduce a key expirated, I need to change expiration date before to store the key
         my_manager.request_access_code("68026939T", "Juan Perez",
@@ -53,7 +51,7 @@ class TestRevocation(unittest.TestCase):
         my_key_expirated = AccessKey.create_key_from_file(JSON_FILES_PATH +
                                                           "key_ok_testing_expired.json")
         # We manipulate the expiration date to obtain an expired AccessKey
-        #print("tercera ki: ", my_key_expirated.key)
+        # print("tercera ki: ", my_key_expirated.key)
         my_key_expirated.expiration_date = 0
         my_key_expirated.store_keys()
 
@@ -65,8 +63,6 @@ class TestRevocation(unittest.TestCase):
         my_manager.get_access_key(JSON_FILES_PATH + "key_to_revoke.json")
 
         my_manager.revoke_key(JSON_FILES_PATH + "key_already_revoke.json")
-
-
 
     def test_parametrized_cases_tests(self):
         """Parametrized cases read from testingCases_RF4.csv"""
@@ -102,7 +98,7 @@ class TestRevocation(unittest.TestCase):
         result = my_key.revoke_key(JSON_FILES_PATH + "key_active_revoke.json")
         self.assertEqual(["mail1@uc3m.es", "mail2@uc3m.es"], result)
         self.assertEqual(True, Revocation().validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
-                        "45c3583c3ef003409dfb2d128853e19979b8d70a1dd9ca25d3e974524a1e4658"))
+                                                                 "45c3583c3ef003409dfb2d128853e19979b8d70a1dd9ca25d3e974524a1e4658"))
 
     def test_revoke_resident(self):
         """
@@ -112,7 +108,7 @@ class TestRevocation(unittest.TestCase):
         result = my_key.revoke_key(JSON_FILES_PATH + "key_resident_revoke.json")
         self.assertEqual(["mail1@uc3m.es", "mail2@uc3m.es"], result)
         self.assertEqual(True, Revocation().validate_json_stored(JSON_FILES_PATH + "storeFinalRevocations.json",
-                        "b51e91628f8a8c5b17e35b813782799511b8af743a09ef6f12c573345455f79e"))
+                                                                 "b51e91628f8a8c5b17e35b813782799511b8af743a09ef6f12c573345455f79e"))
 
     def test_revoke_key_expired(self):
         """

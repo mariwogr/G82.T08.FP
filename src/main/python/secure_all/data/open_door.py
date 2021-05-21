@@ -1,8 +1,6 @@
-
 import json
 from secure_all.data.attributes.attribute_key import Key
 from secure_all.storage.access_log_store import AccessLogJsonStore
-
 
 
 class OpenDoor:
@@ -25,7 +23,7 @@ class OpenDoor:
                 data = json.load(checking_file)
                 if isinstance(data, list):
                     for elem in data:
-                        #print("elem: ", elem)
+                        # print("elem: ", elem)
                         if Key(elem["_OpenDoor__code"]).value:
                             print("Success reading the code")
                         if type(elem["_OpenDoor__access_time"]) in (float, int):
