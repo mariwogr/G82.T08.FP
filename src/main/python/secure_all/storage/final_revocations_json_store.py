@@ -4,6 +4,12 @@ from secure_all.cfg.access_manager_config import JSON_FILES_PATH
 from secure_all.exception.access_management_exception import AccessManagementException
 
 
+# pylint: disable=duplicate-code
+
+##### Hacemos disable del código duplicado porque final y temporal revocations y keys_json_store
+##### tienen el código muy parecido pero al intentar hacer refactor nos dieron batantes problemas
+##### y optamos a hacer rollback finalmente
+
 class FinalRevocationsJsonStore:
     """Extends JsonStore """
 
