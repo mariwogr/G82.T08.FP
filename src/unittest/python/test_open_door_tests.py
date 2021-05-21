@@ -4,8 +4,8 @@ import csv
 import json
 
 from secure_all import AccessManager, AccessManagementException, \
-    AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore, AccessLogJsonStore, \
-    Key
+    AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore, AccessLogJsonStore
+from secure_all.data.open_door import OpenDoor
 
 
 class TestOpenDoor(unittest.TestCase):
@@ -58,11 +58,11 @@ class TestOpenDoor(unittest.TestCase):
                 file_name = JSON_FILES_PATH + row["FILE"]
                 print("Param:" + row['ID TEST'] + row["VALID INVALID"])
                 if row["VALID INVALID"] == "VALID":
-                    es_valido = self.validate_json_stored(file_name)
+                    es_valido = OpenDoor.validate_json_stored(file_name)
                     self.assertEqual(True, es_valido)
                 else:
                     with self.assertRaises(AccessManagementException) as c_m:
-                        self.validate_json_stored(file_name)
+                        OpenDoor.validate_json_stored(file_name)
                     self.assertEqual(c_m.exception.message, row["EXPECTED RESULT"])
 
     def test_open_door_bad_key_regex(self):
@@ -83,7 +83,7 @@ class TestOpenDoor(unittest.TestCase):
         result = my_key.open_door \
             ("45c3583c3ef003409dfb2d128853e19979b8d70a1dd9ca25d3e974524a1e4658")
         self.assertEqual(True, result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
+        self.assertEqual(True, OpenDoor.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
 
     def test_open_door_resident(self):
         """
@@ -93,7 +93,7 @@ class TestOpenDoor(unittest.TestCase):
         result = my_key.open_door \
             ("b51e91628f8a8c5b17e35b813782799511b8af743a09ef6f12c573345455f79e")
         self.assertEqual(True, result)
-        self.assertEqual(True, self.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
+        self.assertEqual(True, OpenDoor.validate_json_stored(JSON_FILES_PATH + "storeOpenDoor.json"))
 
     def test_open_door_bad_key_is_not_found(self):
         """
@@ -117,35 +117,7 @@ class TestOpenDoor(unittest.TestCase):
 
         self.assertEqual("key is not found or is expired", c_m.exception.message)
 
-    def validate_json_stored(self, file):
-        """ Method to validate the access_log_json_store"""
-        try:
-            with open(file, 'r', encoding='utf-8', newline="") as checking_file:
-                data = json.load(checking_file)
-                if isinstance(data, list):
-                    for elem in data:
-                        #print("elem: ", elem)
-                        if Key(elem["_OpenDoor__code"]).value:
-                            print("Success reading the code")
-                        if type(elem["_OpenDoor__access_time"]) in (float, int):
-                            print("success reading the time stamp")
-                        else:
-                            raise AccessManagementException("Marca de tiempo no válida")  # will raise a ValueError
-                    return True
 
-                if Key(data["_OpenDoor__code"]).value:
-                    print("Success reading the code")
-                if type(data["_OpenDoor__access_time"]) in (float, int):
-                    print("success reading the time stamp")
-                else:
-                    float(data["_OpenDoor__access_time"])  # will raise a ValueError
-                return True
-        except FileNotFoundError as ex:
-            raise AccessManagementException("not found") from ex
-        except json.JSONDecodeError as ex:
-            raise AccessManagementException("error de decodificación") from ex
-        except KeyError as ex:
-            raise AccessManagementException("no existe esa clave") from ex
 
 
 if __name__ == '__main__':
