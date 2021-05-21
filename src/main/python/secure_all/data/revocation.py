@@ -11,6 +11,7 @@ from secure_all.data.auxiliary_functions.auxiliar_revocate import AuxiliarRevoca
 # pylint:disable=invalid-name
 # pylint:disable=no-self-use
 # pylint:disable=too-few-public-methods
+# pylint:disable=expression-not-assigned
 
 
 class Revocation:
@@ -28,7 +29,7 @@ class Revocation:
 
 
         def is_valid(self, file):
-
+            """ method to check if the json is valid"""
             data = AuxiliarRevocate().open_revocate(file)
 
             try:
@@ -36,10 +37,8 @@ class Revocation:
                     Key(data["Key"]).value
                     Revoc(data["Revocation"]).value
                     Reason(data["Reason"]).value
-
                     return True
-                else:
-                    raise AccessManagementException("Error al descodificar json")
+                raise AccessManagementException("Error al descodificar json")
 
             except KeyError as ex:
                 raise AccessManagementException("Error al descodificar json") from ex
@@ -52,7 +51,8 @@ class Revocation:
                     for elem in data:
                         if elem["_AccessKey__key"] == key:
                             return True  # clave revocada con éxito
-                    raise AccessManagementException("La clave fue revocada previamente por este método")
+                    raise AccessManagementException("La clave fue revocada\
+                                                     previamente por este método")
             except FileNotFoundError as ex:
                 raise AccessManagementException("not found") from ex
             except json.JSONDecodeError as ex:

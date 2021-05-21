@@ -39,7 +39,12 @@ INVALID;RF4 37;modify_39_revoke.json;JSON Decode Error - Wrong JSON Format
 INVALID;RF4 38;modify_41_revoke.json;key invalid
 INVALID;RF4 39;modify_48_revoke.json;revocation type invalid
 INVALID;RF4 40;modify_55_revoke.json;reason invalid
-
-
-
-
+INVALID;RF4 41;key_63_chars_revoke.json;key invalid
+INVALID;RF4 42;key_65_chars_revoke.json;key invalid
+VALID;RF4 43;reason_100_chars_revoke.json;True
+INVALID;RF4 44;reason_101_chars_revoke.json;reason invalid
+INVALID;RF4 45;revocation_not_str_revoke.json;revocation type invalid
+VALID;RF4 46;reason_1_char_revoke.json;True
+VALID;RF4 47;reason_2_chars_revoke.json;True
+VALID;RF4 48;reason_99_chars_revoke.json;True
+INVALID;RF4 49;reason_0_chars_revoke.json;reason invalid

@@ -2,6 +2,7 @@
 import json
 from secure_all.exception.access_management_exception import AccessManagementException
 
+# pylint:disable=useless-return
 
 class JsonStore:
     """Managest stores based on JsonFiles"""
@@ -43,7 +44,6 @@ class JsonStore:
         """find the value key in the _ID_FIELD"""
         self.load_store()
         for item in self._data_list:
-            #print("item: ", item)
             if item[self._ID_FIELD] == key:
                 return item
         return None
