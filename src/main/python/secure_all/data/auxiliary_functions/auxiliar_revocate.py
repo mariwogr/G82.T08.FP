@@ -17,9 +17,13 @@ class AuxiliarRevocate:
     class __AuxiliarRevocate:
         """private class for singleton programming"""
         # avoids line too long and solves an error in tests
-        pepe = "El archivo de entrada tiene algún problema"
-        jose = " relacionado con su formato o con su acceso."
-        _INCORRECT_FORMAT = pepe + jose
+        _PART1 = "El archivo de entrada tiene algún problema"
+        _PART2 = " relacionado con su formato o con su acceso."
+        _INCORRECT_FORMAT = _PART1 + _PART2
+        _DECODE_ERROR = "JSON Decode Error - Wrong JSON Format"
+        _CLAVE_NO_EXISTE = "La clave recibida no existe"
+        _CLAVE_CADUCADA = "La clave recibida ha caducado"
+        _ALREADY_REVOKED = "La clave fue revocada previamente por este método"
 
         def __init__(self):
             pass
@@ -33,7 +37,7 @@ class AuxiliarRevocate:
             except FileNotFoundError as ex:
                 raise AccessManagementException(self._INCORRECT_FORMAT) from ex
             except json.JSONDecodeError as ex:
-                raise AccessManagementException("JSON Decode Error - Wrong JSON Format") from ex
+                raise AccessManagementException(self._DECODE_ERROR) from ex
 
             return data
 
@@ -43,7 +47,7 @@ class AuxiliarRevocate:
             try:
                 key = data["Key"]
             except KeyError as ex:
-                raise AccessManagementException("La clave recibida no existe") from ex
+                raise AccessManagementException(self._CLAVE_NO_EXISTE) from ex
 
             store = KeysJsonStore()
             try:
@@ -52,10 +56,10 @@ class AuxiliarRevocate:
             except AccessManagementException as ex:
                 if ex.message == "key invalid":
                     raise AccessManagementException(self._INCORRECT_FORMAT)
-                raise AccessManagementException("La clave recibida ha caducado") from ex
+                raise AccessManagementException(self._CLAVE_CADUCADA) from ex
 
             if found_key is None:
-                raise AccessManagementException("La clave recibida no existe")
+                raise AccessManagementException(self._CLAVE_NO_EXISTE)
 
             emails = found_key.notification_emails
 
@@ -75,8 +79,7 @@ class AuxiliarRevocate:
                     store_final_revocations.add_item(found_key)
                     store_final_revocations.save_store()
                 else:
-                    raise AccessManagementException("La clave fue \
-                    revocada previamente por este método")
+                    raise AccessManagementException(self._ALREADY_REVOKED)
 
             elif data["Revocation"] == "Temporal":
                 store_temporal_revocations = TemporalRevocationsJsonStore()
@@ -87,12 +90,10 @@ class AuxiliarRevocate:
                     store_temporal_revocations.add_item(found_key)
                     store_temporal_revocations.save_store()
                 else:
-                    raise AccessManagementException("La clave fue revocada \
-                    previamente por este método")
+                    raise AccessManagementException(self._ALREADY_REVOKED)
 
             else:
-                raise AccessManagementException("El archivo de entrada tiene\
-                 algún problema relacionado con su formato o con su acceso.")
+                raise AccessManagementException(self._INCORRECT_FORMAT)
 
     __instance = None
 

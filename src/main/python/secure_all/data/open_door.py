@@ -8,6 +8,7 @@ from secure_all.storage.access_log_store import AccessLogJsonStore
 
 class OpenDoor:
     """class to open the door"""
+
     def __init__(self, key_sha_256):
         self.__code = Key(key_sha_256).value
         # fix self.__access_time only for testing 13-3-2021 18_49
@@ -27,7 +28,6 @@ class OpenDoor:
                 data = json.load(checking_file)
                 if isinstance(data, list):
                     for elem in data:
-                        # print("elem: ", elem)
                         if Key(elem["_OpenDoor__code"]).value:
                             print("Success reading the code")
                         if type(elem["_OpenDoor__access_time"]) in (float, int):

@@ -17,6 +17,13 @@ from secure_all.data.auxiliary_functions.auxiliar_revocate import AuxiliarRevoca
 class Revocation:
     """revocation class"""
     class __Revocation:
+
+        _DECODE_ERROR = "Error al descodificar json"
+        _ALREADY_REVOKED = "La clave fue revocada previamente por este método"
+        _NOT_FOUND = "not found"
+        _ERROR_DEC = "error de decodificación"
+        _NO_EXISTE = "no existe esa clave"
+
         def __init__(self):
             pass
 
@@ -38,10 +45,10 @@ class Revocation:
                     Revoc(data["Revocation"]).value
                     Reason(data["Reason"]).value
                     return True
-                raise AccessManagementException("Error al descodificar json")
+                raise AccessManagementException(self._DECODE_ERROR)
 
             except KeyError as ex:
-                raise AccessManagementException("Error al descodificar json") from ex
+                raise AccessManagementException(self._DECODE_ERROR) from ex
 
         def validate_json_stored(self, file, key):
             """ Method to validate the access_log_json_store"""
@@ -51,14 +58,13 @@ class Revocation:
                     for elem in data:
                         if elem["_AccessKey__key"] == key:
                             return True  # clave revocada con éxito
-                    raise AccessManagementException("La clave fue revocada\
-                                                     previamente por este método")
+                    raise AccessManagementException(self._ALREADY_REVOKED)
             except FileNotFoundError as ex:
-                raise AccessManagementException("not found") from ex
+                raise AccessManagementException(self._NOT_FOUND) from ex
             except json.JSONDecodeError as ex:
-                raise AccessManagementException("error de decodificación") from ex
+                raise AccessManagementException(self._ERROR_DEC) from ex
             except KeyError as ex:
-                raise AccessManagementException("no existe esa clave") from ex
+                raise AccessManagementException(self._NO_EXISTE) from ex
 
 
 
