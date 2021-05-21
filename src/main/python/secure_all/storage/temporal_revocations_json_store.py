@@ -3,6 +3,7 @@ from secure_all.storage.json_store import JsonStore
 from secure_all.cfg.access_manager_config import JSON_FILES_PATH
 from secure_all.exception.access_management_exception import AccessManagementException
 
+# pylint:disable=duplicate-code
 
 class TemporalRevocationsJsonStore:
     """Extends JsonStore """
@@ -10,15 +11,15 @@ class TemporalRevocationsJsonStore:
     class __TemporalRevocationsJsonStore(JsonStore):
         # pylint: disable=invalid-name
 
-        ID_FIELD = "_AccessKey__key"
+        T_ID_FIELD = "_AccessKey__key"
 
-        ACCESS_CODE = "_AccessKey__access_code"
-        DNI = "_AccessKey__dni"
-        MAIL_LIST = "_AccessKey__notification_emails"
+        T_ACCESS_CODE = "_AccessKey__access_code"
+        T_DNI = "_AccessKey__dni"
+        T_MAIL_LIST = "_AccessKey__notification_emails"
         INVALID_ITEM = "Invalid item to be stored as a key"
         KEY_ALREADY_STORED = "key already found in storeRequest"
         _FILE_PATH = JSON_FILES_PATH + "storeTemporalRevocations.json"
-        _ID_FIELD = ID_FIELD
+        _ID_FIELD = T_ID_FIELD
 
         def add_item(self, item):
             """Implementing the restrictions related to avoid duplicated keys"""
@@ -37,7 +38,8 @@ class TemporalRevocationsJsonStore:
 
     def __new__(cls):
         if not TemporalRevocationsJsonStore.__instance:
-            TemporalRevocationsJsonStore.__instance = TemporalRevocationsJsonStore.__TemporalRevocationsJsonStore()
+            TemporalRevocationsJsonStore.__instance = \
+                TemporalRevocationsJsonStore.__TemporalRevocationsJsonStore()
         return TemporalRevocationsJsonStore.__instance
 
     def __getattr__(self, nombre):

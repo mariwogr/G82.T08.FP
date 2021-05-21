@@ -37,7 +37,8 @@ class FinalRevocationsJsonStore:
 
     def __new__(cls):
         if not FinalRevocationsJsonStore.__instance:
-            FinalRevocationsJsonStore.__instance = FinalRevocationsJsonStore.__FinalRevocationsJsonStore()
+            FinalRevocationsJsonStore.__instance = \
+                FinalRevocationsJsonStore.__FinalRevocationsJsonStore()
         return FinalRevocationsJsonStore.__instance
 
     def __getattr__(self, nombre):

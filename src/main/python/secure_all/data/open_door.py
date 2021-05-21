@@ -1,9 +1,13 @@
+"""contains the class to open the door"""
+
 import json
 from secure_all.data.attributes.attribute_key import Key
 from secure_all.storage.access_log_store import AccessLogJsonStore
 
+# pylint:disable=import-outside-toplevel
 
 class OpenDoor:
+    """class to open the door"""
     def __init__(self, key_sha_256):
         self.__code = Key(key_sha_256).value
         # fix self.__access_time only for testing 13-3-2021 18_49
@@ -16,8 +20,8 @@ class OpenDoor:
 
     @classmethod
     def validate_json_stored(cls, file):
-        from secure_all import AccessManagementException
         """ Method to validate the access_log_json_store"""
+        from secure_all import AccessManagementException
         try:
             with open(file, 'r', encoding='utf-8', newline="") as checking_file:
                 data = json.load(checking_file)
@@ -29,7 +33,7 @@ class OpenDoor:
                         if type(elem["_OpenDoor__access_time"]) in (float, int):
                             print("success reading the time stamp")
                         else:
-                            raise AccessManagementException("Marca de tiempo no válida")  # will raise a ValueError
+                            raise AccessManagementException("Marca de tiempo no válida")
                     return True
 
                 if Key(data["_OpenDoor__code"]).value:
@@ -48,8 +52,10 @@ class OpenDoor:
 
     @property
     def enter_code(self):
+        """returns the code"""
         return self.__code
 
     @property
     def access_time(self):
+        """returns access time"""
         return self.__access_time

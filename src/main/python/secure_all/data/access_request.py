@@ -91,6 +91,7 @@ class AccessRequest:
         return self.__access_code
 
     def access_code_inicial(self):
+        """returns the access code generated when creating the request"""
         return hashlib.md5(self.__str__().encode()).hexdigest()
 
     @classmethod

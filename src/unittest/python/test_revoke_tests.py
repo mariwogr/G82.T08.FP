@@ -1,7 +1,6 @@
 """open_door test cases"""
 import unittest
 import csv
-import json
 
 from secure_all import AccessManager, AccessManagementException, \
     AccessKey, JSON_FILES_PATH, KeysJsonStore, RequestJsonStore

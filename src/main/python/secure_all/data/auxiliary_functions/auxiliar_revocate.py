@@ -1,30 +1,44 @@
+"""module with an auxiliary class"""
+
 import json
 from secure_all.data.access_key import AccessKey
 from secure_all.storage.keys_json_store import KeysJsonStore
 from secure_all.storage.temporal_revocations_json_store import TemporalRevocationsJsonStore
 from secure_all.storage.final_revocations_json_store import FinalRevocationsJsonStore
 
+# pylint:disable=invalid-name
+# pylint:disable=no-self-use
+# pylint:disable=import-outside-toplevel
+# pylint:disable=raise-missing-from
+
 
 class AuxiliarRevocate:
+    """ class containing auxiliary funcionts for revocating"""
     class __AuxiliarRevocate:
+        """private class for singleton programming"""
+        # avoids line too long and solves an error in tests
+        pepe = "El archivo de entrada tiene algún problema"
+        jose = " relacionado con su formato o con su acceso."
+        _INCORRECT_FORMAT = pepe + jose
 
         def __init__(self):
             pass
 
         def open_revocate(self, file):
+            """opens a revocation file"""
             from secure_all import AccessManagementException
             try:
                 with open(file, "r", encoding="utf-8", newline="") as json_file:
                     data = json.load(json_file)
             except FileNotFoundError as ex:
-                raise AccessManagementException \
-                    ("El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.") from ex
+                raise AccessManagementException(self._INCORRECT_FORMAT) from ex
             except json.JSONDecodeError as ex:
                 raise AccessManagementException("JSON Decode Error - Wrong JSON Format") from ex
 
             return data
 
         def find_key(self, data):
+            """finds the key to revocate"""
             from secure_all import AccessManagementException
             try:
                 key = data["Key"]
@@ -37,8 +51,7 @@ class AuxiliarRevocate:
                 found_key.is_valid()
             except AccessManagementException as ex:
                 if ex.message == "key invalid":
-                    raise AccessManagementException(
-                        "El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.")
+                    raise AccessManagementException(self._INCORRECT_FORMAT)
                 raise AccessManagementException("La clave recibida ha caducado") from ex
 
             if found_key is None:
@@ -51,6 +64,7 @@ class AuxiliarRevocate:
             return emails
 
         def update_revocation_stores(self, data, found_key, store):
+            """updates the stores after changing them"""
             from secure_all import AccessManagementException
             if data["Revocation"] == "Final":
                 store_final_revocations = FinalRevocationsJsonStore()
@@ -61,7 +75,8 @@ class AuxiliarRevocate:
                     store_final_revocations.add_item(found_key)
                     store_final_revocations.save_store()
                 else:
-                    raise AccessManagementException("La clave fue revocada previamente por este método")
+                    raise AccessManagementException("La clave fue \
+                    revocada previamente por este método")
 
             elif data["Revocation"] == "Temporal":
                 store_temporal_revocations = TemporalRevocationsJsonStore()
@@ -72,11 +87,12 @@ class AuxiliarRevocate:
                     store_temporal_revocations.add_item(found_key)
                     store_temporal_revocations.save_store()
                 else:
-                    raise AccessManagementException("La clave fue revocada previamente por este método")
+                    raise AccessManagementException("La clave fue revocada \
+                    previamente por este método")
 
             else:
-                raise AccessManagementException(
-                    "El archivo de entrada tiene algún problema relacionado con su formato o con su acceso.")
+                raise AccessManagementException("El archivo de entrada tiene\
+                 algún problema relacionado con su formato o con su acceso.")
 
     __instance = None
 
